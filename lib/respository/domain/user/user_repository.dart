@@ -7,4 +7,6 @@ part 'response.dart';
 
 abstract class UserRepository extends Repository {
   factory UserRepository() => UserRepositoryImpl();
+
+  Future<Result<UserDetailsSuccess, UserDetailsFailure>> userDetails();
 }

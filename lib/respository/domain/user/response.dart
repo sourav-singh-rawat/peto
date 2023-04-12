@@ -17,3 +17,15 @@ class UserSuccess extends RepositorySuccess {
     String? message,
   }) : super(message: message);
 }
+
+class UserDetailsSuccess extends UserSuccess {
+  final UserDetails userDetails;
+
+  UserDetailsSuccess({
+    required this.userDetails,
+  });
+}
+
+class UserDetailsFailure extends UserFailure {
+  UserDetailsFailure();
+}
