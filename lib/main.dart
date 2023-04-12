@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peto/firebase_options.dart';
 import 'package:peto/utils/booter/app_booter_cubit.dart';
 import 'package:peto/utils/profile/profile_cubit.dart';
+import 'package:peto/utils/theme/theme_cubit.dart';
 
 void main() async {
   await Firebase.initializeApp(
@@ -19,6 +20,9 @@ void main() async {
           booter.bootUp();
 
           return booter;
+        }),
+        BlocProvider<KThemeCubit>(create: (context) {
+          return KThemeCubit();
         }),
         BlocProvider<KProfileCubit>(create: (context) {
           return KProfileCubit();
