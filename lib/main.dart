@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peto/firebase_options.dart';
 import 'package:peto/utils/booter/app_booter_cubit.dart';
-import 'package:peto/utils/profile/cubit/profile_cubit.dart';
+import 'package:peto/utils/profile/profile_cubit.dart';
 
 void main() async {
   await Firebase.initializeApp(
