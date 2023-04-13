@@ -5,8 +5,8 @@ import 'package:peto/respository/repository_helper_abstract.dart';
 import 'package:peto/utils/app_extensions.dart';
 import 'package:peto/utils/helper/helper.dart';
 
-part 'widgets/pet_list/cubit/pet_list_cubit.dart';
-part 'widgets/pet_list/cubit/pet_list_state.dart';
+part 'widgets/pet_list/controller/pet_list_cubit.dart';
+part 'widgets/pet_list/controller/pet_list_state.dart';
 part 'widgets/pet_list/pet_list.dart';
 
 class HomeView extends StatelessWidget {
