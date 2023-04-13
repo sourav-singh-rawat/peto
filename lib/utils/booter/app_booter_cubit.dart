@@ -7,8 +7,8 @@ import 'package:peto/modules/domain/modules.dart';
 part 'app_booter_state.dart';
 part 'booter_abstract.dart';
 
-class KAppBooterCubit extends Cubit<_KAppBooterState> {
-  KAppBooterCubit() : super(_KAppBooterState.init());
+class KAppBooterCubit extends Cubit<KAppBooterState> {
+  KAppBooterCubit() : super(KAppBooterState.init());
 
   void bootUp() async {
     final bootUpProcesses = UnmodifiableListView<Future<dynamic>>([

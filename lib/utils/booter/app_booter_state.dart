@@ -2,20 +2,20 @@ part of 'app_booter_cubit.dart';
 
 enum AppBooterStatus { booting, booted }
 
-class _KAppBooterState {
+class KAppBooterState {
   final AppBooterStatus status;
 
-  _KAppBooterState({
+  KAppBooterState({
     required this.status,
   });
 
-  _KAppBooterState.init()
+  KAppBooterState.init()
       : this(
           status: AppBooterStatus.booting,
         );
 
-  _KAppBooterState copyWith({AppBooterStatus? status}) {
-    return _KAppBooterState(
+  KAppBooterState copyWith({AppBooterStatus? status}) {
+    return KAppBooterState(
       status: status ?? this.status,
     );
   }
