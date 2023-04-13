@@ -1,19 +1,19 @@
 part of 'theme_cubit.dart';
 
-class _KThemeState {
+class KThemeState {
   final KThemeType type;
 
-  _KThemeState({
+  const KThemeState({
     required this.type,
   });
 
-  _KThemeState.init()
+  KThemeState.init()
       : this(
           type: KThemeBox.instance.type,
         );
 
-  _KThemeState copyWith({KThemeType? type}) {
-    return _KThemeState(
+  KThemeState copyWith({KThemeType? type}) {
+    return KThemeState(
       type: type ?? this.type,
     );
   }

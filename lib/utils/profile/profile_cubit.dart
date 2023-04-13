@@ -8,8 +8,8 @@ import 'package:peto/respository/domain/user/user_repository.dart';
 
 part 'profile_state.dart';
 
-class KProfileCubit extends Cubit<_KProfileState> {
-  KProfileCubit() : super(_KProfileState.init());
+class KProfileCubit extends Cubit<KProfileState> {
+  KProfileCubit() : super(KProfileState.init());
 
   Future<bool> refresh() async {
     final completer = Completer<bool>();
@@ -17,7 +17,7 @@ class KProfileCubit extends Cubit<_KProfileState> {
     final isUserAuthenticated = KAuth.instance.authStatus == AuthStatus.authenticated;
 
     Future<void> onSuccess(UserDetailsSuccess success) async {
-      emit(_KProfileState(
+      emit(KProfileState(
         userDetails: success.userDetails,
       ));
 
@@ -25,7 +25,7 @@ class KProfileCubit extends Cubit<_KProfileState> {
     }
 
     Future<void> onFailure(UserDetailsFailure failure) async {
-      emit(_KProfileState(
+      emit(KProfileState(
         userDetails: null,
       ));
 

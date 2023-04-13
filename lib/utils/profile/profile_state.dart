@@ -1,13 +1,13 @@
 part of 'profile_cubit.dart';
 
-class _KProfileState {
+class KProfileState {
   final UserDetails? userDetails;
 
-  _KProfileState({
+  KProfileState({
     required this.userDetails,
   });
 
-  _KProfileState.init()
+  KProfileState.init()
       : this(
           userDetails: null,
         );
