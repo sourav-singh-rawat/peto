@@ -1,7 +1,7 @@
 part of 'pet_list_cubit.dart';
 
-class _PetListState {
-  _PetListState();
+class PetListState {
+  PetListState();
 
-  _PetListState.init();
+  PetListState.init();
 }
