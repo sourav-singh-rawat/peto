@@ -10,7 +10,7 @@ class _PetList extends StatefulWidget {
 class __PetListState extends State<_PetList> {
   @override
   void initState() {
-    BlocProvider.of<_PetListCubit>(context).fetchPetList();
+    BlocProvider.of<_PetListCubit>(context).initState();
 
     super.initState();
   }
@@ -19,39 +19,55 @@ class __PetListState extends State<_PetList> {
   Widget build(BuildContext context) {
     return BlocBuilder<_PetListCubit, _PetListState>(
       builder: (context, state) {
-        if (state.petListStatus == ApiStatus.loading) {
+        if (state.petListStatus == ApiStatus.loading && state.pets.isEmpty) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
 
-        if (state.petListStatus == ApiStatus.failed) {
-          return const Center(
-            child: Text('Failed to fetch'),
-          );
-        }
-
-        return ListView.builder(
-          itemCount: state.pets.length,
-          itemBuilder: (context, index) {
-            final pet = state.pets[index];
-            return SizedBox(
-              height: 100,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: ListTile(
-                  leading: Image.network(
-                    pet.imageUrl?[0] ?? '',
-                    width: 50,
-                    height: 50,
+        return SingleChildScrollView(
+          controller: BlocProvider.of<_PetListCubit>(context).scrollController,
+          child: Column(
+            children: [
+              ...state.pets.map((pet) {
+                return SizedBox(
+                  height: 100,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ListTile(
+                      leading: Image.network(
+                        pet.imageUrl?[0] ?? '',
+                        width: 50,
+                        height: 50,
+                      ),
+                      title: Text(pet.name ?? ''),
+                    ),
                   ),
-                  title: Text(pet.name ?? ''),
-                ),
-              ),
-            );
-          },
+                );
+              }).toList(),
+              const SizedBox(height: 20),
+              if (state.petListStatus != ApiStatus.success)
+                Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  alignment: Alignment.center,
+                  child: () {
+                    if (state.petListStatus == ApiStatus.loading) {
+                      return const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state.petListStatus == ApiStatus.failed) {
+                      return const Text('Failed to fetch');
+                    }
+
+                    return const Placeholder();
+                  }(),
+                )
+            ],
+          ),
         );
       },
     );

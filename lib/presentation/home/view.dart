@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peto/respository/domain/pet/pet_repository.dart';
 import 'package:peto/respository/repository_helper_abstract.dart';
+import 'package:peto/utils/app_extensions.dart';
+import 'package:peto/utils/helper/helper.dart';
 
 part 'widgets/pet_list/cubit/pet_list_cubit.dart';
 part 'widgets/pet_list/cubit/pet_list_state.dart';
