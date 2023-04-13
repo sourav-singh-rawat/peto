@@ -7,4 +7,6 @@ part 'response.dart';
 
 abstract class PetRepository extends Repository {
   factory PetRepository() => PetRepositoryImpl();
+
+  Future<Result<PetListSuccess, PetListFailure>> petsList();
 }

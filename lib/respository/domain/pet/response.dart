@@ -17,3 +17,15 @@ class PetSuccess extends RepositorySuccess {
     String? message,
   }) : super(message: message);
 }
+
+class PetListSuccess extends PetSuccess {
+  final List<PetDetails> pets;
+
+  PetListSuccess({
+    required this.pets,
+  });
+}
+
+class PetListFailure extends PetFailure {
+  PetListFailure();
+}
