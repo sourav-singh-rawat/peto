@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peto/modules/domain/router/router.dart';
 import 'package:peto/modules/domain/theme/theme.dart';
 import 'package:peto/utils/app_extensions.dart';
 import 'package:peto/utils/booter/app_booter_cubit.dart';
@@ -41,7 +44,8 @@ class _MyAppState extends State<MyApp> {
     BlocProvider.of<KAppBooterCubit>(context).bootUp();
 
     return MaterialApp(
-      navigatorKey: KNavigationService.navigatorKey,
+      navigatorKey: KRouterBox.instance.navigatorKey,
+      // navigatorObservers: [KRouterBox.instance.routeObserver],
       title: 'Peto',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -52,9 +56,7 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: KAppX.theme.current.colors.primary,
             body: Center(
               child: TextButton(
-                onPressed: () {
-                  KAppX.theme.toggleTheme();
-                },
+                onPressed: () {},
                 child: const Text('change'),
               ),
             ),
