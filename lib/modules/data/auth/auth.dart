@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:peto/modules/domain/auth/auth.dart';
 import 'package:peto/utils/app_extensions.dart';
-import 'package:peto/utils/profile/cubit/profile_cubit.dart';
 
 class KAuthImpl implements KAuth {
   AuthStatus _authStatus = AuthStatus.unauthenticated;
