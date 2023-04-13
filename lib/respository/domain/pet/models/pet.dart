@@ -2,14 +2,14 @@ part of '../pet_repository.dart';
 
 class PetDetails {
   final String pid;
-  final String name;
-  final String type;
-  final String breed;
-  final int age;
-  final String gender;
-  final String location;
-  final String description;
-  final List<String> imageUrl;
+  final String? name;
+  final PetType? type;
+  final String? breed;
+  final int? age;
+  final PetGender? gender;
+  final String? location;
+  final String? description;
+  final List<String>? imageUrl;
 
   PetDetails({
     required this.pid,
@@ -27,12 +27,30 @@ class PetDetails {
       : this(
           pid: pid,
           name: json['name'],
-          type: json['type'],
+          type: (json['type'] as String?).toPetType,
           breed: json['breed'],
           age: json['age'],
-          gender: json['gender'],
+          gender: (json['gender'] as String?).toPetGender,
           location: json['location'],
           description: json['description'],
           imageUrl: json['image_url'].cast<String>(),
         );
+}
+
+enum PetType { dog, cat }
+
+enum PetGender { male, female }
+
+extension on String? {
+  PetType? get toPetType {
+    final type = this?.toLowerCase();
+
+    return PetType.values.firstWhere((element) => element.name == type);
+  }
+
+  PetGender? get toPetGender {
+    final gender = this?.toLowerCase();
+
+    return PetGender.values.firstWhere((element) => element.name == gender);
+  }
 }
