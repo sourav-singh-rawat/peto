@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peto/presentation/core_widgets/image_provider.dart';
 import 'package:peto/presentation/core_widgets/indicator_dot.dart';
-import 'package:peto/presentation/image_viewer/view.dart';
+import 'package:peto/presentation/screens/image_viewer/view.dart';
 import 'package:peto/respository/domain/pet/pet_repository.dart';
 import 'package:peto/utils/app_extensions.dart';
 import 'package:peto/utils/custom_extensions/custom_extensions.dart';
