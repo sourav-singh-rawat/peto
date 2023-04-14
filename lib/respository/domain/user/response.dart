@@ -29,3 +29,35 @@ class UserDetailsSuccess extends UserSuccess {
 class UserDetailsFailure extends UserFailure {
   UserDetailsFailure();
 }
+
+class GoogleLoginSuccess extends UserSuccess {
+  final UserDetails userDetails;
+
+  GoogleLoginSuccess({
+    required this.userDetails,
+  });
+}
+
+class GoogleLoginFailure extends UserFailure {
+  GoogleLoginFailure();
+}
+
+class GoogleLogoutSuccess extends UserSuccess {
+  GoogleLogoutSuccess();
+}
+
+class GoogleLogoutFailure extends UserFailure {
+  GoogleLogoutFailure();
+}
+
+class UpdateUserDetailsSuccess extends UserSuccess {
+  final UserDetails userDetails;
+
+  UpdateUserDetailsSuccess({
+    required this.userDetails,
+  });
+}
+
+class UpdateUserDetailsFailure extends UserFailure {
+  UpdateUserDetailsFailure();
+}
