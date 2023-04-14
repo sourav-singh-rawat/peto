@@ -6,6 +6,7 @@ import 'package:peto/modules/domain/theme/theme.dart';
 
 part 'policies/colors/dark.dart';
 part 'policies/colors/light.dart';
+part 'policies/fonts.dart';
 
 class KThemeBoxImpl implements KThemeBox {
   @override
@@ -43,6 +44,9 @@ class KThemeBoxImpl implements KThemeBox {
 
   @override
   KThemeColors get colors => _currentColorsScheme;
+
+  @override
+  KThemeFontWeights get fontWeight => _KThemeFontWeightsImpl();
 
   void _switchToDarkTheme() {
     _currentType = KThemeType.dark;
