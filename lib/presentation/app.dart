@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peto/modules/domain/router/router.dart';
 import 'package:peto/modules/domain/theme/theme.dart';
 import 'package:peto/presentation/screens/home/view.dart';
+import 'package:peto/presentation/screens/splash_screen/view.dart';
 import 'package:peto/utils/booter/app_booter_cubit.dart';
 import 'package:peto/utils/profile/profile_cubit.dart';
 import 'package:peto/utils/theme/theme_cubit.dart';
@@ -63,7 +64,7 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'Mulish',
             shadowColor: const Color.fromRGBO(0, 0, 0, 0.25),
           ),
-          home: const HomeView(),
+          home: const SplashView(),
         );
       },
     );
