@@ -1,33 +1,21 @@
-// part of 'router.dart';
+part of 'router.dart';
 
-// class RouteAwareWidget extends StatefulWidget {
-//   State<RouteAwareWidget> createState() => RouteAwareWidgetState();
-// }
+class _KNavigatorObserver extends NavigatorObserver {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPush(route, previousRoute);
+    log('Pushed route: ${route.settings.name}');
+  }
 
-// // Implement RouteAware in a widget's state and subscribe it to the RouteObserver.
-// class RouteAwareWidgetState extends State<RouteAwareWidget> with RouteAware {
-//   @override
-//   void didChangeDependencies() {
-//     super.didChangeDependencies();
-//     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
-//   }
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPop(route, previousRoute);
+    log('Popped route: ${route.settings.name}');
+  }
 
-//   @override
-//   void dispose() {
-//     routeObserver.unsubscribe(this);
-//     super.dispose();
-//   }
-
-//   @override
-//   void didPush() {
-//     // Route was pushed onto navigator and is now topmost route.
-//   }
-
-//   @override
-//   void didPopNext() {
-//     // Covering route was popped off the navigator.
-//   }
-
-//   @override
-//   Widget build(BuildContext context) => Placeholder();
-// }
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    log('Replaced route: ${oldRoute?.settings.name} with ${newRoute?.settings.name}');
+  }
+}
