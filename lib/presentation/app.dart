@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peto/modules/domain/router/router.dart';
+import 'package:peto/modules/domain/theme/theme.dart';
 import 'package:peto/presentation/screens/home/view.dart';
 import 'package:peto/utils/booter/app_booter_cubit.dart';
 import 'package:peto/utils/profile/profile_cubit.dart';
@@ -42,18 +43,25 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     BlocProvider.of<KAppBooterCubit>(context).bootUp();
 
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<KThemeCubit, KThemeState>(
       builder: (context, state) {
         return MaterialApp(
           navigatorKey: KRouterBox.instance.navigatorKey,
           // navigatorObservers: [KRouterBox.instance.routeObserver],
           debugShowCheckedModeBanner: false,
-          title: 'Peto',
+          title: 'Petter',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            brightness: state.type == KThemeType.dark ? Brightness.dark : Brightness.light,
+            fontFamily: 'Mulish',
+            shadowColor: const Color.fromRGBO(0, 0, 0, 0.25),
           ),
           home: const HomeView(),
         );
