@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "214135885758-ej5gi8d5em2dq4ck2s25q346b267ol6i.apps.googleusercontent.com",
+          "client_id": "214135885758-0ohsqm9kea33qqeujbr6g4horlm4ge35.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.peto",
+            "certificate_hash": "18e985bb4402522380c906dd394c3925e0c7bba3"
+          }
+        },
+        {
+          "client_id": "214135885758-3r6r13v8di9h9s91opih9q7plhdhat3f.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,8 +35,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "214135885758-ej5gi8d5em2dq4ck2s25q346b267ol6i.apps.googleusercontent.com",
+              "client_id": "214135885758-3r6r13v8di9h9s91opih9q7plhdhat3f.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "214135885758-976v5gn6fg42b6q7kkpvh51gts6uchvi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.peto"
+              }
             }
           ]
         }
