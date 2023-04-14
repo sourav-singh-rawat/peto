@@ -39,7 +39,8 @@ class __PetListState extends State<_PetList> {
                     child: ListTile(
                       onTap: () {
                         KAppX.router.push(
-                          PetDetailsView(
+                          path: '/pet_details',
+                          page: PetDetailsView(
                             petDetails: pet,
                           ),
                           fullScreenDialog: true,

@@ -112,7 +112,8 @@ class _ImageViewer extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         KAppX.router.push(
-          ImageViewerScreen(
+          path: '/image_viewer',
+          page: ImageViewerScreen(
             id: pid,
             images: images,
             initialIndex: initialIndex,
