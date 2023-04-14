@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -7,11 +8,15 @@ import 'package:peto/utils/app_extensions.dart';
 class KAuthImpl implements KAuth {
   AuthStatus _authStatus = AuthStatus.unauthenticated;
 
+  final StreamController<AuthStatus> _authStatusStreamSubscription = StreamController<AuthStatus>();
+
   @override
   Future<void> bootUp() async {
     log('[Auth.bootUp]');
 
     _authStatus = AuthStatus.unauthenticated;
+
+    _authStatusStreamSubscription.add(_authStatus);
 
     final token = await KAppX.storage.retrieve(
       key: KAuth.authenticationTokenKey,
@@ -23,8 +28,10 @@ class KAuthImpl implements KAuth {
     if (token != null) {
       _authStatus = AuthStatus.authenticated;
 
-      await KAppX.profile.refresh();
+      await KAppX.profile.refresh(token);
     }
+
+    notifyAuthStatus();
   }
 
   @override
@@ -33,12 +40,13 @@ class KAuthImpl implements KAuth {
   }
 
   @override
-  void onBootUp() {
-    // TODO: implement onBootUp
-  }
+  void onBootUp() {}
 
   @override
   AuthStatus get authStatus => _authStatus;
+
+  @override
+  Stream<AuthStatus> get autStatusListener => _authStatusStreamSubscription.stream;
 
   @override
   Future<void> onLogIn(String token) async {
@@ -52,6 +60,8 @@ class KAuthImpl implements KAuth {
     );
 
     _authStatus = AuthStatus.authenticated;
+
+    notifyAuthStatus();
   }
 
   @override
@@ -63,5 +73,11 @@ class KAuthImpl implements KAuth {
     _authStatus = AuthStatus.unauthenticated;
 
     await KAppX.profile.refresh();
+
+    notifyAuthStatus();
+  }
+
+  void notifyAuthStatus() async {
+    _authStatusStreamSubscription.add(_authStatus);
   }
 }

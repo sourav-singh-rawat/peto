@@ -11,7 +11,13 @@ part 'profile_state.dart';
 class KProfileCubit extends Cubit<KProfileState> {
   KProfileCubit() : super(KProfileState.init());
 
-  Future<bool> refresh() async {
+  void update(UserDetails userDetails) {
+    emit(KProfileState(
+      userDetails: userDetails,
+    ));
+  }
+
+  Future<bool> refresh([String? uid]) async {
     final completer = Completer<bool>();
 
     final isUserAuthenticated = KAuth.instance.authStatus == AuthStatus.authenticated;
@@ -35,13 +41,17 @@ class KProfileCubit extends Cubit<KProfileState> {
     if (isUserAuthenticated) {
       final userRepository = UserRepository();
 
-      final response = await userRepository.userDetails();
+      final response = await userRepository.userDetails(
+        request: UserDetailsRequest(
+          uid: uid ?? state.userDetails!.uid,
+        ),
+      );
 
       response.resolve(onSuccess, onFailure);
     } else {
       onFailure(UserDetailsFailure());
     }
 
-    return completer.future;
+    return await completer.future;
   }
 }

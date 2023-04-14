@@ -2,7 +2,9 @@ import 'dart:collection';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:peto/modules/domain/auth/auth.dart';
 import 'package:peto/modules/domain/modules.dart';
+import 'package:peto/presentation/screens/auth/view.dart';
 import 'package:peto/presentation/screens/home/view.dart';
 import 'package:peto/utils/app_extensions.dart';
 
@@ -28,9 +30,23 @@ class KAppBooterCubit extends Cubit<KAppBooterState> {
   void _onBootUp() async {
     KModules.instance.onBootUp();
 
-    // Future.delayed(const Duration(milliseconds: 3000), () {
-    KAppX.router.pushReplacement(const HomeView());
-    // });
+    await Future.delayed(const Duration(milliseconds: 3000), () {});
+
+    KAuth.instance.autStatusListener.listen((authStatus) {
+      final isAuthenticated = authStatus == AuthStatus.authenticated;
+
+      if (isAuthenticated) {
+        KAppX.router.pushReplacement(
+          path: '/home',
+          page: const HomeView(),
+        );
+      } else {
+        KAppX.router.pushReplacement(
+          path: '/auth',
+          page: const AuthView(),
+        );
+      }
+    });
   }
 
   void bootDown() {

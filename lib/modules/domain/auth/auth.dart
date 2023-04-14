@@ -10,6 +10,8 @@ abstract class KAuth implements KModules<void> {
 
   static const String authenticationTokenKey = 'authentication_token';
 
+  Stream<AuthStatus> get autStatusListener;
+
   AuthStatus get authStatus;
 
   Future<void> onLogIn(String token);
