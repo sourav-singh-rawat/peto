@@ -11,7 +11,7 @@ abstract class KRouterBox extends KModules<void> {
 
   RouteObserver<PageRoute> get routeObserver;
 
-  Future<T?>? push<T extends Object?>(Widget page);
+  Future<T?>? push<T extends Object?>(Widget page, {bool fullScreenDialog = false});
 
   void pop<T extends Object?>([T? result]);
 }

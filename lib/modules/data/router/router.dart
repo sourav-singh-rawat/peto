@@ -1,15 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/routes.dart';
-import 'package:flutter/src/widgets/pages.dart';
-import 'package:flutter/src/widgets/navigator.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:peto/modules/domain/router/router.dart';
 
 class KRouterBoxImpl extends KRouterBox {
   @override
-  Future<void> bootUp() {
-    throw UnimplementedError();
-  }
+  Future<void> bootUp() async {}
 
   @override
   void bootDown() {}
@@ -29,10 +23,15 @@ class KRouterBoxImpl extends KRouterBox {
   NavigatorState? get router => _navigatorKey.currentState;
 
   @override
-  Future<T?>? push<T extends Object?>(Widget page) {
-    return navigatorKey.currentState?.push(CupertinoPageRoute(builder: (context) {
-      return page;
-    }));
+  Future<T?>? push<T extends Object?>(Widget page, {bool fullScreenDialog = false}) {
+    return navigatorKey.currentState?.push(
+      CupertinoPageRoute(
+        builder: (context) {
+          return page;
+        },
+        fullscreenDialog: fullScreenDialog,
+      ),
+    );
   }
 
   @override
