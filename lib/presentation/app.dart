@@ -50,6 +50,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           navigatorKey: KRouterBox.instance.navigatorKey,
           // navigatorObservers: [KRouterBox.instance.routeObserver],
+          debugShowCheckedModeBanner: false,
           title: 'Peto',
           theme: ThemeData(
             primarySwatch: Colors.blue,
