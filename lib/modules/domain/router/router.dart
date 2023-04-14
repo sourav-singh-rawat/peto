@@ -14,4 +14,6 @@ abstract class KRouterBox extends KModules<void> {
   Future<T?>? push<T extends Object?>(Widget page, {bool fullScreenDialog = false});
 
   void pop<T extends Object?>([T? result]);
+
+  Future<T?>? pushReplacement<T extends Object?, TO extends Object?>(Widget page, {bool fullScreenDialog = false});
 }

@@ -38,4 +38,16 @@ class KRouterBoxImpl extends KRouterBox {
   void pop<T extends Object?>([T? result]) {
     navigatorKey.currentState?.pop();
   }
+
+  @override
+  Future<T?>? pushReplacement<T extends Object?, TO extends Object?>(Widget page, {bool fullScreenDialog = false}) {
+    return navigatorKey.currentState?.pushReplacement(
+      CupertinoPageRoute(
+        builder: (context) {
+          return page;
+        },
+        fullscreenDialog: fullScreenDialog,
+      ),
+    );
+  }
 }
