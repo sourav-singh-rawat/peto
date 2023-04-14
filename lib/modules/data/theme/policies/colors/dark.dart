@@ -8,6 +8,9 @@ class KThemeColorsDarkImpl implements KThemeColors {
   KMaterialColor get onPrimary => throw UnimplementedError();
 
   @override
+  Color get onPrimaryVariant => throw UnimplementedError();
+
+  @override
   KMaterialColor get secondary => throw UnimplementedError();
 
   @override
@@ -18,6 +21,12 @@ class KThemeColorsDarkImpl implements KThemeColors {
 
   @override
   Color get onBackground => throw UnimplementedError();
+
+  @override
+  Color get backgroundVariant => throw UnimplementedError();
+
+  @override
+  Color get onBackgroundVariant => throw UnimplementedError();
 
   @override
   KMaterialColor get success => throw UnimplementedError();

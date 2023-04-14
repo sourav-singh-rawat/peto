@@ -9,6 +9,8 @@ abstract class KThemeColors {
 
   KMaterialColor get onPrimary;
 
+  Color get onPrimaryVariant;
+
   KMaterialColor get secondary;
 
   KMaterialColor get onSecondary;
@@ -16,6 +18,10 @@ abstract class KThemeColors {
   Color get background;
 
   Color get onBackground;
+
+  Color get backgroundVariant;
+
+  Color get onBackgroundVariant;
 
   KMaterialColor get success;
 
