@@ -37,7 +37,15 @@ class __PetListState extends State<_PetList> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: ListTile(
-                      leading: Image.network(
+                      onTap: () {
+                        KAppX.router.push(
+                          PetDetailsView(
+                            petDetails: pet,
+                          ),
+                          fullScreenDialog: true,
+                        );
+                      },
+                      leading: KImageProvider(
                         pet.imageUrl?[0] ?? '',
                         width: 50,
                         height: 50,
