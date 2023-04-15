@@ -10,6 +10,8 @@ class _HomeCubit extends Cubit<_HomeState> {
   final throttle = KThrottle(duration: const Duration(milliseconds: 3000));
 
   void onSearchIconPressed(BuildContext context) {
+    final petListStateController = BlocProvider.of<_PetListCubit>(context);
+
     final hasText = searchTextFieldController.text.isNotEmpty;
 
     if (hasText) {
@@ -24,17 +26,70 @@ class _HomeCubit extends Cubit<_HomeState> {
       emit(state.copyWith(isSearching: true));
 
       searchTextFieldController.addListener(() {
-        throttle.call(() {
-          _petListRequest = _petListRequest.copyWith(
-            queryValue: searchTextFieldController.text,
-          );
+        final hasNoText = searchTextFieldController.text.isEmpty;
 
-          BlocProvider.of<_PetListCubit>(context).fetchPetList(
+        if (hasNoText) {
+          petListStateController.fetchPetList();
+          return;
+        }
+
+        _petListRequest = _petListRequest.copyWith(
+          queryValue: searchTextFieldController.text,
+        );
+        throttle.call(() {
+          petListStateController.fetchPetList(
             request: _petListRequest,
             isSearching: true,
           );
         });
       });
     }
+  }
+
+  void onFilterOptionPressed<T extends Enum>(T value, BuildContext context) {
+    var newList = [...state.filters];
+
+    if (state.filters.contains(value)) {
+      newList.remove(value);
+    } else {
+      newList = [...newList, value];
+    }
+
+    emit(state.copyWith(
+      filters: newList,
+    ));
+
+    final petListStateController = BlocProvider.of<_PetListCubit>(context);
+
+    Map<String, List<String>> queryOptionsSelected = {
+      'type': [],
+      'gender': [],
+    };
+
+    for (var item in newList) {
+      final type = item.runtimeType;
+      late String key;
+      switch (type) {
+        case PetType:
+          key = 'type';
+          item = item as PetType;
+          break;
+        case PetGender:
+          key = 'gender';
+          item = item as PetGender;
+          break;
+      }
+
+      queryOptionsSelected[key] = [...queryOptionsSelected[key]!, item.name.capitalize()];
+    }
+
+    _petListRequest = _petListRequest.copyWith(
+      queryOptionsSelected: queryOptionsSelected,
+    );
+
+    petListStateController.fetchPetList(
+      request: _petListRequest,
+      isSearching: true,
+    );
   }
 }

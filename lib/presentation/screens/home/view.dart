@@ -8,6 +8,7 @@ import 'package:peto/presentation/core_widgets/app_bar.dart';
 import 'package:peto/presentation/core_widgets/image_provider.dart';
 import 'package:peto/presentation/core_widgets/indicator_dot.dart';
 import 'package:peto/presentation/core_widgets/loader/circular_loader.dart';
+import 'package:peto/presentation/core_widgets/pill.dart';
 import 'package:peto/presentation/core_widgets/scaffold.dart';
 import 'package:peto/presentation/screens/pet_details/view.dart';
 import 'package:peto/respository/domain/pet/pet_repository.dart';
@@ -24,6 +25,7 @@ part 'widgets/pet_tile/pet_tile.dart';
 part 'widgets/search_field.dart';
 part 'controller/home_cubit.dart';
 part 'controller/home_state.dart';
+part 'widgets/filter_options.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
