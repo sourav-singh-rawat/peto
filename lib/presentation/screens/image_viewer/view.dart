@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:peto/presentation/core_widgets/indicator_dot.dart';
+import 'package:peto/utils/app_extensions.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -41,8 +43,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          Align(
-            alignment: Alignment.topCenter,
+          Center(
             child: PhotoViewGallery.builder(
               pageController: PageController(
                 initialPage: widget.initialIndex,
@@ -70,33 +71,42 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
               itemCount: widget.images.length,
             ),
           ),
-          // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child: _buildDots(),
-          // ),
-          // Positioned(
-          //   top: 0,
-          //   child: Container(
-          //     width: 360.toAutoScaledWidth,
-          //     padding: EdgeInsets.only(top: safePadding, left: 4.toAutoScaledWidth),
-          //     color: Colors.black.withOpacity(0.5),
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.start,
-          //       children: [
-          //         IconButton(
-          //           color: Colors.white,
-          //           height: 24.toAutoScaledHeight,
-          //           width: 24.toAutoScaledHeight,
-          //           cancel: true,
-          //           onPressed: () {
-          //             QAppX.router.pop();
-          //           },
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
+          Positioned(
+            top: 0,
+            left: 16,
+            child: SafeArea(
+              child: IconButton(
+                icon: Icon(
+                  Icons.close,
+                  color: KAppX.theme.current.colors.onBackground,
+                  size: 28,
+                ),
+                onPressed: () {
+                  KAppX.router.pop();
+                },
+              ),
+            ),
+          ),
         ],
+      ),
+      bottomSheet: Container(
+        height: 100,
+        color: Colors.black,
+        width: double.infinity,
+        alignment: Alignment.topCenter,
+        child: ListView.separated(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: widget.images.length,
+          itemBuilder: (context, index) {
+            return KIndicatorDot(
+              isActive: currentIndex == index,
+            );
+          },
+          separatorBuilder: (context, index) {
+            return const SizedBox(width: 8);
+          },
+        ),
       ),
     );
   }
