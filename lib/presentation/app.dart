@@ -63,6 +63,12 @@ class _MyAppState extends State<MyApp> {
             brightness: state.type == KThemeType.dark ? Brightness.dark : Brightness.light,
             fontFamily: 'Mulish',
             shadowColor: const Color.fromRGBO(0, 0, 0, 0.25),
+            iconTheme: Theme.of(context).iconTheme.copyWith(color: state.type == KThemeType.light ? const Color(0xffB5B4B4) : Colors.white),
+            appBarTheme: Theme.of(context).appBarTheme.copyWith(
+                  iconTheme: Theme.of(context).iconTheme.copyWith(
+                        color: state.type == KThemeType.light ? const Color(0xffB5B4B4) : Colors.white,
+                      ),
+                ),
           ),
           home: const SplashView(),
         );
