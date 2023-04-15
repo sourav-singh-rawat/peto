@@ -34,8 +34,10 @@ class _PetListCubit extends Cubit<_PetListState> {
   }) async {
     if (isSearching) {
       emit(state.copyWith(
+        pets: [],
         petListStatus: ApiStatus.loading,
       ));
+      return;
     }
 
     final response = await petRepository.petsList(
