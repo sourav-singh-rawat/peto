@@ -14,7 +14,7 @@ class PetRepositoryImpl implements PetRepository {
   @override
   Future<Result<PetListSuccess, PetListFailure>> petsList({required PetListRequest request}) async {
     try {
-      Query<Map<String, dynamic>> query = _firestore.collection('pets');
+      var query = _firestore.collection('pets').limit(10);
 
       if (request.queryValue != null && request.queryValue!.isNotEmpty) {
         query = query.where('name', isGreaterThan: request.queryValue!).where('name', isLessThan: request.queryValue!).orderBy('name');
@@ -33,8 +33,6 @@ class PetRepositoryImpl implements PetRepository {
           }
         }
       }
-
-      query = query.limit(10);
 
       if (_lastPetDocumentSnapped != null) {
         query = query.startAfterDocument(_lastPetDocumentSnapped!);
