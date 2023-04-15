@@ -140,10 +140,6 @@ class _ImageViewer extends StatelessWidget {
           fullScreenDialog: true,
         );
       },
-      // child: Hero(
-      //   tag: '${images[initialIndex]}$pid',
-      //   child: child,
-      // ),
       child: child,
     );
   }
