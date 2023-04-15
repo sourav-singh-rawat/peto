@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peto/utils/app_extensions.dart';
 
 class KIndicatorDot extends StatelessWidget {
   final bool isActive;
@@ -41,11 +42,11 @@ class TextSeparatorDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ??const EdgeInsets.only(left: 8, right: 10),
+      padding: padding ?? const EdgeInsets.only(left: 8, right: 10),
       child: const KIndicatorDot(
         width: 4,
         height: 4,
-        activeColor: Colors.grey,
+        activeColor: Color(0xffDFDFDF),
         isActive: true,
       ),
     );

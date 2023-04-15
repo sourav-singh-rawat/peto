@@ -24,7 +24,6 @@ class _PetImagePreviewState extends State<_PetImagePreview> {
     return BlocBuilder<_PetImagePreviewCubit, _PetImageState>(
       builder: (context, state) {
         return Stack(
-          key: ValueKey(widget.pid),
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width,
@@ -40,9 +39,22 @@ class _PetImagePreviewState extends State<_PetImagePreview> {
                       onPageChangedCallback: (int index) {
                         stateController.onPageChanged(index);
                       },
-                      child: KImageProvider(
-                        imageUrl,
-                        backgroundColor: Colors.grey,
+                      child: Container(
+                        foregroundDecoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xff1C1A1A),
+                              Colors.transparent,
+                            ],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            stops: [0, 0.45],
+                          ),
+                        ),
+                        child: KImageProvider(
+                          imageUrl,
+                          backgroundColor: KAppX.theme.current.colors.onBackgroundVariant,
+                        ),
                       ),
                     ),
                   );
@@ -64,10 +76,13 @@ class _PetImagePreviewState extends State<_PetImagePreview> {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 54,
-                child: SizedBox(
+                top: 300,
+                child: Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width,
                   height: 12,
                   child: ListView.separated(
+                    shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemCount: widget.images?.length ?? 0,
                     itemBuilder: (context, index) {

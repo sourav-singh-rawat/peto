@@ -9,11 +9,13 @@ class _PetDetailedInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = KAppX.theme.current;
+
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: theme.colors.backgroundVariant,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
         ),
@@ -27,7 +29,11 @@ class _PetDetailedInfo extends StatelessWidget {
         children: [
           Text(
             petDetails.name ?? 'Pet',
-            textScaleFactor: 2.2,
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: theme.fontWeight.wBold,
+              color: theme.colors.onBackgroundVariant,
+            ),
           ),
           const SizedBox(height: 16),
           _BasicInfoPoints(
@@ -60,18 +66,42 @@ class _BasicInfoPoints extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = KAppX.theme.current;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (age != null) ...[
-          Text('${age}years'),
+          Text(
+            '${age}years',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: theme.fontWeight.wRegular,
+              color: theme.colors.onBackground,
+            ),
+          ),
           const TextSeparatorDot(),
         ],
         if (gender != null) ...[
-          Text(gender!.capitalize()),
+          Text(
+            gender!.capitalize(),
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: theme.fontWeight.wRegular,
+              color: theme.colors.onBackground,
+            ),
+          ),
           const TextSeparatorDot(),
         ],
-        if (breed != null) Text(breed!),
+        if (breed != null)
+          Text(
+            breed!,
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: theme.fontWeight.wRegular,
+              color: theme.colors.onBackground,
+            ),
+          ),
       ],
     );
   }
@@ -90,14 +120,18 @@ class _PetStory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = KAppX.theme.current;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Colors.grey.shade300,
-          border: Border.all(
-            color: Colors.grey,
-          ),
-          borderRadius: BorderRadius.circular(8)),
+        color: const Color(0xffFAFAFA),
+        border: Border.all(
+          width: 1,
+          color: const Color(0xffF1F1F0),
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 12,
@@ -110,12 +144,18 @@ class _PetStory extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.percent, color: Colors.grey, size: 24),
+                Image.asset(
+                  KIcons.pen,
+                  width: 24,
+                  height: 24,
+                ),
                 const SizedBox(width: 12),
                 Text(
                   "$petName's story",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: theme.fontWeight.wBold,
+                    color: const Color(0xff1C1A1A),
                   ),
                 ),
               ],
@@ -123,18 +163,33 @@ class _PetStory extends StatelessWidget {
             const SizedBox(height: 24),
           ],
           if (petStory != null) ...[
-            Text(petStory!),
+            Text(
+              petStory!,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: theme.fontWeight.wRegular,
+                color: theme.colors.onBackgroundVariant,
+              ),
+            ),
             const SizedBox(height: 19),
           ],
           if (location != null)
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.location_on, color: Colors.grey, size: 24),
+                Image.asset(
+                  KIcons.pin_location,
+                  width: 24,
+                  height: 24,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   location!,
-                  style: const TextStyle(color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: theme.fontWeight.wRegular,
+                    color: theme.colors.onBackground,
+                  ),
                 ),
               ],
             ),

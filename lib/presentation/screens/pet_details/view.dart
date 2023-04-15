@@ -1,12 +1,17 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peto/presentation/core_widgets/image_provider.dart';
 import 'package:peto/presentation/core_widgets/indicator_dot.dart';
+import 'package:peto/presentation/core_widgets/loader/circular_loader.dart';
+import 'package:peto/presentation/core_widgets/scaffold.dart';
 import 'package:peto/presentation/screens/image_viewer/view.dart';
 import 'package:peto/respository/domain/pet/pet_repository.dart';
 import 'package:peto/utils/app_extensions.dart';
+import 'package:peto/utils/assets/icons.dart';
 import 'package:peto/utils/custom_extensions/custom_extensions.dart';
 
 part 'widgets/image_preview/controller/pet_image_preview_cubit.dart';
@@ -61,12 +66,15 @@ class __PetDetailsViewBodyState extends State<_PetDetailsViewBody> {
   Widget build(BuildContext context) {
     final safePadding = MediaQuery.of(context).padding.top;
 
+    final theme = KAppX.theme.current;
+
     final stateController = context.read<_PetDetailsCubit>();
+
+    final isAdopted = widget.petDetails.adoptionDetails?.isAdopted ?? false;
 
     return BlocBuilder<_PetDetailsCubit, _PetDetailsState>(
       builder: (context, state) {
-        return Scaffold(
-          backgroundColor: Colors.white,
+        return KScaffold(
           appBar: state.isScrolledToTop
               ? AppBar(
                   leading: IconButton(
@@ -80,47 +88,54 @@ class __PetDetailsViewBodyState extends State<_PetDetailsViewBody> {
                 )
               : null,
           body: Stack(
-            fit: StackFit.expand,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height + safePadding,
                 child: _PetImagePreview(
                   pid: widget.petDetails.pid,
                   images: widget.petDetails.imageUrl,
                 ),
               ),
-              Positioned.fill(
+              const Positioned(
+                top: 0,
+                left: 16,
                 child: SafeArea(
-                  child: SingleChildScrollView(
-                    controller: stateController.scrollController,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                          height: 325 - safePadding,
-                          color: Colors.transparent,
-                          child: const _Header(),
-                        ),
-                        _PetDetailedInfo(
-                          petDetails: widget.petDetails,
-                        ),
-                      ],
+                  child: _Header(),
+                ),
+              ),
+              if (isAdopted)
+                Positioned(
+                  top: 0,
+                  right: 16,
+                  child: SafeArea(
+                    child: Image.asset(
+                      KIcons.adopted_stamp,
+                      width: 150,
+                      height: 150,
+                      color: theme.colors.secondary,
                     ),
+                  ),
+                ),
+              Positioned(
+                top: 325,
+                child: SingleChildScrollView(
+                  child: _PetDetailedInfo(
+                    petDetails: widget.petDetails,
                   ),
                 ),
               ),
             ],
           ),
           bottomSheet: Container(
-            color: Colors.white,
+            height: 72,
+            color: Colors.transparent,
             width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ).copyWith(
-                bottom: 24,
-              ),
-              child: const _AdoptMeButton(),
+            padding: const EdgeInsets.only(
+              bottom: 24,
+            ),
+            alignment: Alignment.center,
+            child: _AdoptMeButton(
+              isAdopted: isAdopted,
             ),
           ),
         );

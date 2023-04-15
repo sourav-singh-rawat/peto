@@ -5,24 +5,23 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.topLeft,
-      padding: const EdgeInsets.only(left: 16),
-      child: IconButton(
-        padding: EdgeInsets.zero,
-        color: Colors.grey,
-        icon: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-          ),
-          padding: const EdgeInsets.all(8),
-          child: const Icon(Icons.close),
+    return IconButton(
+      padding: EdgeInsets.zero,
+      icon: Container(
+        decoration: BoxDecoration(
+          color: KAppX.theme.current.colors.backgroundVariant,
+          shape: BoxShape.circle,
         ),
-        onPressed: () {
-          KAppX.router.pop();
-        },
+        padding: const EdgeInsets.all(6),
+        child: Icon(
+          Icons.close,
+          color: KAppX.theme.current.colors.onBackground,
+          size: 28,
+        ),
       ),
+      onPressed: () {
+        KAppX.router.pop();
+      },
     );
   }
 }
