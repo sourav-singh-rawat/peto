@@ -28,14 +28,37 @@ class _PetListCubit extends Cubit<_PetListState> {
     });
   }
 
-  void fetchPetList() async {
-    final response = await petRepository.petsList();
+  void fetchPetList({
+    PetListRequest? request,
+    bool isSearching = false,
+  }) async {
+    if (isSearching) {
+      emit(state.copyWith(
+        petListStatus: ApiStatus.loading,
+      ));
+    }
+
+    final response = await petRepository.petsList(
+      request: PetListRequest().copyWith(
+        queryValue: request?.queryValue,
+        queryOptionsSelected: request?.queryOptionsSelected,
+      ),
+    );
 
     void onSuccess(PetListSuccess success) {
-      emit(state.copyWith(
-        petListStatus: ApiStatus.success,
-        pets: [...state.pets, ...success.pets],
-      ));
+      if (isSearching) {
+        emit(
+          state.copyWith(
+            petListStatus: ApiStatus.success,
+            pets: success.pets,
+          ),
+        );
+      } else {
+        emit(state.copyWith(
+          petListStatus: ApiStatus.success,
+          pets: [...state.pets, ...success.pets],
+        ));
+      }
     }
 
     void onFailure(PetListFailure failure) {
@@ -46,5 +69,15 @@ class _PetListCubit extends Cubit<_PetListState> {
     }
 
     response.resolve(onSuccess, onFailure);
+  }
+
+  void onPetTilePressed(PetDetails petDetails) {
+    KAppX.router.push(
+      path: '/pet_details',
+      page: PetDetailsView(
+        petDetails: petDetails,
+      ),
+      fullScreenDialog: true,
+    );
   }
 }

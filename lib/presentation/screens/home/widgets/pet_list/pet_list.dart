@@ -21,7 +21,7 @@ class __PetListState extends State<_PetList> {
       builder: (context, state) {
         if (state.petListStatus == ApiStatus.loading && state.pets.isEmpty) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: KCircularLoader(),
           );
         }
 
@@ -29,34 +29,14 @@ class __PetListState extends State<_PetList> {
           controller: BlocProvider.of<_PetListCubit>(context).scrollController,
           child: Column(
             children: [
+              const SizedBox(height: 4),
               ...state.pets.map((pet) {
-                return SizedBox(
-                  height: 100,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ListTile(
-                      onTap: () {
-                        KAppX.router.push(
-                          path: '/pet_details',
-                          page: PetDetailsView(
-                            petDetails: pet,
-                          ),
-                          fullScreenDialog: true,
-                        );
-                      },
-                      leading: KImageProvider(
-                        pet.imageUrl?[0] ?? '',
-                        width: 50,
-                        height: 50,
-                      ),
-                      title: Text(pet.name ?? ''),
-                    ),
-                  ),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: _PetTile(petDetails: pet),
                 );
               }).toList(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               if (state.petListStatus != ApiStatus.success)
                 Container(
                   padding: const EdgeInsets.only(bottom: 16),
@@ -66,10 +46,17 @@ class __PetListState extends State<_PetList> {
                       return const SizedBox(
                         width: 20,
                         height: 20,
-                        child: CircularProgressIndicator(),
+                        child: KCircularLoader(),
                       );
                     } else if (state.petListStatus == ApiStatus.failed) {
-                      return const Text('Failed to fetch');
+                      return Text(
+                        'Oops, Failed to fetch!',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: KAppX.theme.current.fontWeight.wRegular,
+                          color: KAppX.theme.current.colors.onBackground,
+                        ),
+                      );
                     }
 
                     return const Placeholder();
