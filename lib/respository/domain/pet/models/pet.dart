@@ -10,6 +10,7 @@ class PetDetails {
   final String? location;
   final String? description;
   final List<String>? imageUrl;
+  final PetAdoptionDetails? adoptionDetails;
 
   PetDetails({
     required this.pid,
@@ -21,10 +22,14 @@ class PetDetails {
     required this.location,
     required this.description,
     required this.imageUrl,
+    this.adoptionDetails,
   });
 
-  PetDetails.fromJson({required String pid, required Map<String, dynamic> json})
-      : this(
+  PetDetails.fromJson({
+    required String pid,
+    required Map<String, dynamic> json,
+    required PetAdoptionDetails? adoptionDetails,
+  }) : this(
           pid: pid,
           name: json['name'],
           type: (json['type'] as String?).toPetType,
@@ -34,6 +39,7 @@ class PetDetails {
           location: json['location'],
           description: json['description'],
           imageUrl: json['image_url'].cast<String>(),
+          adoptionDetails: adoptionDetails,
         );
 }
 

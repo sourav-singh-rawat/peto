@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:peto/respository/domain/pet/pet_repository.dart';
+import 'package:peto/respository/domain/user/user_repository.dart';
 import 'package:peto/respository/repository_helper_abstract.dart';
 
 part 'end_points.dart';
@@ -46,13 +48,223 @@ class PetRepositoryImpl implements PetRepository {
         _lastPetDocumentSnapped = documents.last;
       }
 
-      final pets = documents.map<PetDetails>((doc) {
-        return PetDetails.fromJson(pid: doc.id, json: doc.data());
-      }).toList();
+      List<PetDetails> pets = [];
+
+      final petRepository = PetRepository();
+
+      await Future.forEach(documents, (doc) async {
+        final completer = Completer<PetAdoptionDetails?>();
+
+        final adoptionDetailsResponse = await petRepository.petAdoptionDetails(
+          request: PetAdoptionDetailsRequest(
+            pid: doc.id,
+          ),
+        );
+
+        void onAdoptionDetailsSuccess(PetAdoptionDetailsSuccess success) {
+          completer.complete(success.adoptionDetails);
+        }
+
+        void onAdoptionDetailsFailure(PetAdoptionDetailsFailure failure) {
+          completer.complete();
+        }
+
+        adoptionDetailsResponse.resolve(onAdoptionDetailsSuccess, onAdoptionDetailsFailure);
+
+        final adoptionDetails = await completer.future;
+
+        pets.add(
+          PetDetails.fromJson(
+            pid: doc.id,
+            json: doc.data(),
+            adoptionDetails: adoptionDetails,
+          ),
+        );
+      });
 
       return Success(PetListSuccess(pets: pets));
     } catch (error) {
       return Failure(PetListFailure());
+    }
+  }
+
+  @override
+  Future<Result<PetDetailsSuccess, PetDetailsFailure>> petDetails({
+    required PetDetailsRequest request,
+  }) async {
+    try {
+      final query = _firestore.collection('adoption_status').doc(request.pid);
+
+      final document = await query.get();
+
+      if (!document.exists) {
+        return Failure(PetDetailsFailure());
+      }
+
+      final data = document.data();
+
+      if (data != null) {
+        final petRepository = PetRepository();
+
+        final completer = Completer<PetAdoptionDetails?>();
+
+        final petDetailsResponse = await petRepository.petAdoptionDetails(request: PetAdoptionDetailsRequest(pid: request.pid));
+
+        void onPetAdoptionDetailsSuccess(PetAdoptionDetailsSuccess success) {
+          completer.complete(success.adoptionDetails);
+        }
+
+        void onPetAdoptionDetailsFailure(PetAdoptionDetailsFailure failure) {
+          completer.complete();
+        }
+
+        petDetailsResponse.resolve(onPetAdoptionDetailsSuccess, onPetAdoptionDetailsFailure);
+
+        final petAdoptionDetails = await completer.future;
+
+        return Success(
+          PetDetailsSuccess(
+            details: PetDetails.fromJson(
+              pid: request.pid,
+              json: data,
+              adoptionDetails: petAdoptionDetails,
+            ),
+          ),
+        );
+      } else {
+        return Failure(PetDetailsFailure());
+      }
+    } catch (error) {
+      return Failure(PetDetailsFailure());
+    }
+  }
+
+  @override
+  Future<Result<PetAdoptionDetailsSuccess, PetAdoptionDetailsFailure>> petAdoptionDetails({
+    required PetAdoptionDetailsRequest request,
+  }) async {
+    try {
+      final query = _firestore.collection('adoption_status').doc(request.pid);
+
+      final document = await query.get();
+
+      if (!document.exists) {
+        return Failure(PetAdoptionDetailsFailure());
+      }
+
+      final data = document.data();
+
+      if (data != null) {
+        return Success(
+          PetAdoptionDetailsSuccess(
+            adoptionDetails: PetAdoptionDetails.fromJson(data),
+          ),
+        );
+      } else {
+        return Failure(PetAdoptionDetailsFailure());
+      }
+    } catch (error) {
+      return Failure(PetAdoptionDetailsFailure());
+    }
+  }
+
+  @override
+  Future<Result<AdoptionSuccess, AdoptionFailure>> adoptPet({
+    required AdoptionRequest request,
+  }) async {
+    try {
+      final query = _firestore.collection('adoption_status').doc(request.pid);
+
+      await query.set(request.adoptionDetails.toJson());
+
+      return Success(AdoptionSuccess());
+    } catch (error) {
+      return Failure(AdoptionFailure());
+    }
+  }
+
+  @override
+  Future<Result<AdoptionHistorySuccess, AdoptionHistoryFailure>> adoptionHistory({
+    required AdoptionHistoryRequest request,
+  }) async {
+    try {
+      var query = _firestore.collection('adoption_status');
+
+      final collection = await query.get();
+
+      final documents = collection.docs;
+
+      List<AdoptionHistoryDetails> adoptionHistoryDetails = [];
+
+      final petRepository = PetRepository();
+
+      await Future.forEach(documents, (doc) async {
+        final data = doc.data();
+
+        final adoptionDetails = PetAdoptionDetails.fromJson(data);
+
+        final completer = Completer<PetDetails?>();
+
+        final petDetailsResponse = await petRepository.petDetails(
+          request: PetDetailsRequest(
+            pid: doc.id,
+          ),
+        );
+
+        void onPetDetailsSuccess(PetDetailsSuccess success) {
+          completer.complete(success.details);
+        }
+
+        void onPetDetailsFailure(PetDetailsFailure failure) {
+          completer.complete();
+        }
+
+        petDetailsResponse.resolve(onPetDetailsSuccess, onPetDetailsFailure);
+
+        final petDetails = await completer.future;
+
+        final userRepository = UserRepository();
+
+        UserDetails? userDetails;
+
+        final adopterId = adoptionDetails.uid;
+
+        if (adopterId != null) {
+          final completer = Completer<UserDetails?>();
+
+          final userDetailsResponse = await userRepository.userDetails(
+            request: UserDetailsRequest(uid: adopterId),
+          );
+
+          void onUserDetailsSuccess(UserDetailsSuccess success) {
+            completer.complete(success.userDetails);
+          }
+
+          void onUserDetailsFailure(UserDetailsFailure failure) {
+            completer.complete();
+          }
+
+          userDetailsResponse.resolve(onUserDetailsSuccess, onUserDetailsFailure);
+
+          userDetails = await completer.future;
+        }
+
+        adoptionHistoryDetails.add(
+          AdoptionHistoryDetails(
+            details: adoptionDetails,
+            userDetails: userDetails,
+            petDetails: petDetails,
+          ),
+        );
+      });
+
+      return Success(
+        AdoptionHistorySuccess(
+          adoptionHistoryList: adoptionHistoryDetails,
+        ),
+      );
+    } catch (error) {
+      return Failure(AdoptionHistoryFailure());
     }
   }
 }
