@@ -16,8 +16,6 @@ class KAuthImpl implements KAuth {
 
     _authStatus = AuthStatus.unauthenticated;
 
-    _authStatusStreamSubscription.add(_authStatus);
-
     final token = await KAppX.storage.retrieve(
       key: KAuth.authenticationTokenKey,
       decoder: (token) {

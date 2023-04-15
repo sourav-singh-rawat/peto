@@ -32,7 +32,7 @@ class KAppBooterCubit extends Cubit<KAppBooterState> {
 
     await Future.delayed(const Duration(milliseconds: 3000), () {});
 
-    KAuth.instance.autStatusListener.listen((authStatus) {
+    KAuth.instance.autStatusListener.listen((authStatus) async {
       final isAuthenticated = authStatus == AuthStatus.authenticated;
 
       if (isAuthenticated) {
