@@ -19,5 +19,43 @@ class _PetDetailsCubit extends Cubit<_PetDetailsState> {
     });
   }
 
-  void onAdoptMePressed() {}
+  Future<void> onAdoptMePressed(PetDetails petDetails) async {
+    final adoptionDetails = petDetails.adoptionDetails;
+    if (adoptionDetails != null) {
+      emit(state.copyWith(
+        isAdopting: true,
+      ));
+
+      final completer = Completer();
+
+      final petRepository = PetRepository();
+
+      final response = await petRepository.adoptPet(
+        request: AdoptionRequest(
+          pid: petDetails.pid,
+          adoptionDetails: adoptionDetails,
+        ),
+      );
+
+      void onSuccess(AdoptionSuccess success) {
+        emit(state.copyWith(
+          isAdopting: false,
+        ));
+
+        completer.complete();
+      }
+
+      void onFailure(AdoptionFailure failure) {
+        emit(state.copyWith(
+          isAdopting: false,
+        ));
+
+        completer.complete();
+      }
+
+      response.resolve(onSuccess, onFailure);
+
+      return await completer.future;
+    }
+  }
 }

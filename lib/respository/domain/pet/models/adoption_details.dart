@@ -18,10 +18,10 @@ class PetAdoptionDetails {
           uid: json['uid'],
         );
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toRequestJson() {
     var map = <String, dynamic>{};
     map['uid'] = uid;
-    map['is_adopted'] = isAdopted;
+    map['is_adopted'] = true;
     map['timestamp'] = timestamp?.toIso8601String();
     return map;
   }

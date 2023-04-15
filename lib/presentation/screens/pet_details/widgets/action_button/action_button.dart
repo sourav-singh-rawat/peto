@@ -1,26 +1,45 @@
 part of '../../view.dart';
 
 class _AdoptMeButton extends StatelessWidget {
-  final bool isAdopted;
+  final PetDetails petDetails;
   const _AdoptMeButton({
     super.key,
-    required this.isAdopted,
+    required this.petDetails,
   });
 
   @override
   Widget build(BuildContext context) {
+    final profileStateController = context.read<KProfileCubit>();
+
     return BlocBuilder<_PetDetailsCubit, _PetDetailsState>(
       builder: (context, state) {
         final theme = KAppX.theme.current;
 
         final stateController = context.read<_PetDetailsCubit>();
 
+        final isAdopted = petDetails.adoptionDetails?.isAdopted ?? false;
+
+        final petImageUrl = petDetails.imageUrl?[0];
+
+        final userImageUrl = profileStateController.state.userDetails?.photoUrl;
+
         return GestureDetector(
-          onTap: () {
+          onTap: () async {
             if (!state.isAdopting && !isAdopted) {
               HapticFeedback.mediumImpact();
 
-              stateController.onAdoptMePressed();
+              await stateController.onAdoptMePressed(petDetails);
+
+              showCupertinoDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (context) {
+                  return _AdoptedDialog(
+                    petImageUrl: petImageUrl ?? '',
+                    userImageUrl: userImageUrl ?? '',
+                  );
+                },
+              );
             }
           },
           child: Container(
@@ -36,7 +55,10 @@ class _AdoptMeButton extends StatelessWidget {
               children: [
                 Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 12,
+                    ),
                     child: Text(
                       'Adopt me',
                       style: TextStyle(
@@ -52,11 +74,11 @@ class _AdoptMeButton extends StatelessWidget {
                   top: 0,
                   bottom: 0,
                   child: state.isAdopting
-                      ? SizedBox(
-                          height: 24,
-                          width: 24,
+                      ? Center(
                           child: KCircularLoader(
                             color: theme.colors.onSecondary,
+                            height: 24,
+                            width: 24,
                           ),
                         )
                       : Transform.rotate(

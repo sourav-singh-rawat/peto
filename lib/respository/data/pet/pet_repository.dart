@@ -175,7 +175,7 @@ class PetRepositoryImpl implements PetRepository {
     try {
       final query = _firestore.collection('adoption_status').doc(request.pid);
 
-      await query.set(request.adoptionDetails.toJson());
+      await query.set(request.adoptionDetails.toRequestJson());
 
       return Success(AdoptionSuccess());
     } catch (error) {
