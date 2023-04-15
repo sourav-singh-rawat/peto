@@ -7,7 +7,7 @@ class KScaffold extends StatelessWidget {
   final Widget? body;
   final Color? backgroundColor;
   final Widget? bottomSheet;
-  final PreferredSize? appBar;
+  final PreferredSizeWidget? appBar;
   const KScaffold({
     super.key,
     this.backgroundColor,
