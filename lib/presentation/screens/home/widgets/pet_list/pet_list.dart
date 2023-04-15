@@ -1,23 +1,12 @@
 part of '../../view.dart';
 
-class _PetList extends StatefulWidget {
+class _PetList extends StatelessWidget {
   const _PetList({super.key});
-
-  @override
-  State<_PetList> createState() => __PetListState();
-}
-
-class __PetListState extends State<_PetList> {
-  @override
-  void initState() {
-    BlocProvider.of<_PetListCubit>(context).initState();
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<_PetListCubit, _PetListState>(
+      bloc: BlocProvider.of<_PetListCubit>(context)..initState(),
       builder: (context, state) {
         if (state.petListStatus == ApiStatus.loading && state.pets.isEmpty) {
           return const Center(

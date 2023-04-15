@@ -1,13 +1,8 @@
 part of '../view.dart';
 
-class _SearchField extends StatefulWidget {
+class _SearchField extends StatelessWidget {
   const _SearchField({super.key});
 
-  @override
-  State<_SearchField> createState() => __SearchFieldState();
-}
-
-class __SearchFieldState extends State<_SearchField> {
   @override
   Widget build(BuildContext context) {
     final theme = KAppX.theme.current;
@@ -41,7 +36,21 @@ class __SearchFieldState extends State<_SearchField> {
                       ),
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showModalBottomSheet(
+                              backgroundColor: Colors.transparent,
+                              context: context,
+                              builder: (context) {
+                                return MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider(create: (_) => _HomeCubit()),
+                                    BlocProvider(create: (_) => _PetListCubit()),
+                                  ],
+                                  child: const _FilterOptions(),
+                                );
+                              },
+                            );
+                          },
                           icon: const Icon(
                             Icons.filter_list,
                             size: 24,
