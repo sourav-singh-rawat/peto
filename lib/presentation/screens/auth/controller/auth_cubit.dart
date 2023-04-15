@@ -8,6 +8,10 @@ class _AuthCubit extends Cubit<_AuthState> {
   void onGoogleLoginPressed() async {
     HapticFeedback.mediumImpact();
 
+    emit(state.copyWith(
+      isAuthenticating: true,
+    ));
+
     final response = await userRepository.googleLogin();
 
     void onSuccess(GoogleLoginSuccess success) {
