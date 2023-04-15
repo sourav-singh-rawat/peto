@@ -30,3 +30,24 @@ class KIndicatorDot extends StatelessWidget {
     );
   }
 }
+
+class TextSeparatorDot extends StatelessWidget {
+  final EdgeInsets? padding;
+  const TextSeparatorDot({
+    super.key,
+    this.padding,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: padding ??const EdgeInsets.only(left: 8, right: 10),
+      child: const KIndicatorDot(
+        width: 4,
+        height: 4,
+        activeColor: Colors.grey,
+        isActive: true,
+      ),
+    );
+  }
+}

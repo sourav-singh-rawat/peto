@@ -65,31 +65,14 @@ class _BasicInfoPoints extends StatelessWidget {
       children: [
         if (age != null) ...[
           Text('${age}years'),
-          const _SeparatorDot(),
+          const TextSeparatorDot(),
         ],
         if (gender != null) ...[
           Text(gender!.capitalize()),
-          const _SeparatorDot(),
+          const TextSeparatorDot(),
         ],
         if (breed != null) Text(breed!),
       ],
-    );
-  }
-}
-
-class _SeparatorDot extends StatelessWidget {
-  const _SeparatorDot({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(left: 8, right: 10),
-      child: KIndicatorDot(
-        width: 4,
-        height: 4,
-        activeColor: Colors.grey,
-        isActive: true,
-      ),
     );
   }
 }
