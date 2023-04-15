@@ -95,11 +95,14 @@ class __PetDetailsViewBodyState extends State<_PetDetailsViewBody> {
               : null,
           body: Stack(
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height + safePadding,
-                child: _PetImagePreview(
-                  pid: widget.petDetails.pid,
-                  images: widget.petDetails.imageUrl,
+              Hero(
+                tag: '${widget.petDetails.pid}-home',
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height + safePadding,
+                  child: _PetImagePreview(
+                    pid: widget.petDetails.pid,
+                    images: widget.petDetails.imageUrl,
+                  ),
                 ),
               ),
               const Positioned(

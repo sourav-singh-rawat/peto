@@ -19,86 +19,89 @@ class _PetImagePreviewState extends State<_PetImagePreview> {
   Widget build(BuildContext context) {
     final aspectRatio = MediaQuery.of(context).size.width / 356;
 
-    final stateController = context.read<_PetImagePreviewCubit>();
+    return BlocProvider<_PetImagePreviewCubit>(
+      create: (context) => _PetImagePreviewCubit(),
+      child: BlocBuilder<_PetImagePreviewCubit, _PetImageState>(
+        builder: (context, state) {
+          final stateController = context.read<_PetImagePreviewCubit>();
 
-    return BlocBuilder<_PetImagePreviewCubit, _PetImageState>(
-      builder: (context, state) {
-        return Stack(
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 359,
-              child: CarouselSlider(
-                items: widget.images?.map<Widget>((imageUrl) {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: _ImageViewer(
-                      pid: widget.pid,
-                      images: widget.images ?? [],
-                      initialIndex: state.currentIndex,
-                      onPageChangedCallback: (int index) {
-                        stateController.onPageChanged(index);
-                      },
-                      child: Container(
-                        foregroundDecoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xff1C1A1A),
-                              Colors.transparent,
-                            ],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            stops: [0, 0.45],
+          return Stack(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 359,
+                child: CarouselSlider(
+                  items: widget.images?.map<Widget>((imageUrl) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: _ImageViewer(
+                        pid: widget.pid,
+                        images: widget.images ?? [],
+                        initialIndex: state.currentIndex,
+                        onPageChangedCallback: (int index) {
+                          stateController.onPageChanged(index);
+                        },
+                        child: Container(
+                          foregroundDecoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0xff1C1A1A),
+                                Colors.transparent,
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              stops: [0, 0.45],
+                            ),
+                          ),
+                          child: KImageProvider(
+                            imageUrl,
+                            backgroundColor: KAppX.theme.current.colors.onBackgroundVariant,
                           ),
                         ),
-                        child: KImageProvider(
-                          imageUrl,
-                          backgroundColor: KAppX.theme.current.colors.onBackgroundVariant,
-                        ),
                       ),
-                    ),
-                  );
-                }).toList(),
-                carouselController: stateController.controller,
-                options: CarouselOptions(
-                  pageViewKey: PageStorageKey(aspectRatio),
-                  onPageChanged: (index, changeReason) {
-                    stateController.onPageChanged(index);
-                  },
-                  viewportFraction: 0.9999,
-                  aspectRatio: aspectRatio,
-                  scrollDirection: Axis.horizontal,
-                  scrollPhysics: const ClampingScrollPhysics(),
-                ),
-              ),
-            ),
-            if ((widget.images?.length ?? 0) > 1)
-              Positioned(
-                left: 0,
-                right: 0,
-                top: 300,
-                child: Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width,
-                  height: 12,
-                  child: ListView.separated(
-                    shrinkWrap: true,
+                    );
+                  }).toList(),
+                  carouselController: stateController.controller,
+                  options: CarouselOptions(
+                    pageViewKey: PageStorageKey(aspectRatio),
+                    onPageChanged: (index, changeReason) {
+                      stateController.onPageChanged(index);
+                    },
+                    viewportFraction: 0.9999,
+                    aspectRatio: aspectRatio,
                     scrollDirection: Axis.horizontal,
-                    itemCount: widget.images?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return KIndicatorDot(
-                        isActive: state.currentIndex == index,
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(width: 8);
-                    },
+                    scrollPhysics: const ClampingScrollPhysics(),
                   ),
                 ),
               ),
-          ],
-        );
-      },
+              if ((widget.images?.length ?? 0) > 1)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  top: 300,
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width,
+                    height: 12,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.images?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return KIndicatorDot(
+                          isActive: state.currentIndex == index,
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(width: 8);
+                      },
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
