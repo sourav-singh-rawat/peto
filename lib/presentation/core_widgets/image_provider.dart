@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:peto/presentation/core_widgets/loader/dot_loader.dart';
 
 class KImageProvider extends StatelessWidget {
   final String imageUrl;
@@ -39,12 +40,9 @@ class KImageProvider extends StatelessWidget {
       placeholder: (context, url) {
         return SizedBox.expand(
           child: Container(
-            width: (height ?? 6) / 6,
-            height: (height ?? 6) / 6,
+            color: backgroundColor,
             alignment: Alignment.center,
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
+            child: const DotLoader(),
           ),
         );
       },
