@@ -38,9 +38,7 @@ class _PetImagePreviewState extends State<_PetImagePreview> {
                         pid: widget.pid,
                         images: widget.images ?? [],
                         initialIndex: state.currentIndex,
-                        onPageChangedCallback: (int index) {
-                          stateController.onPageChanged(index);
-                        },
+                        onPageChangedCallback: stateController.onPageChanged,
                         child: Container(
                           foregroundDecoration: const BoxDecoration(
                             gradient: LinearGradient(

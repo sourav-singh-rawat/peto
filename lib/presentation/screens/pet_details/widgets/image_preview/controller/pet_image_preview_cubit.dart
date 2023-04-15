@@ -9,5 +9,7 @@ class _PetImagePreviewCubit extends Cubit<_PetImageState> {
     emit(state.copyWith(
       currentIndex: index,
     ));
+
+    controller.animateToPage(index);
   }
 }
