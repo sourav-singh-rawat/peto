@@ -1,6 +1,6 @@
 part of '../../../view.dart';
 
-class _PetListCubit extends Cubit<_PetListState> {
+class _PetListCubit extends Cubit<_PetListState> with KEventListener {
   _PetListCubit() : super(_PetListState.init());
 
   final petRepository = PetRepository();
@@ -24,20 +24,27 @@ class _PetListCubit extends Cubit<_PetListState> {
         throttle(fetchPetList);
       }
     });
+
+    KAppX.eventBroker.addListener(this);
   }
 
   List<PetDetails> _catchPetList = [];
 
-  void fetchPetList({
-    PetListRequest? request,
-  }) async {
+  void fetchPetList({bool isForceFetch = false}) async {
     final response = await petRepository.petsList(request: PetListRequest());
 
     void onSuccess(PetListSuccess success) {
-      emit(state.copyWith(
-        petListStatus: ApiStatus.success,
-        pets: [...state.pets, ...success.pets],
-      ));
+      if (isForceFetch) {
+        emit(state.copyWith(
+          petListStatus: ApiStatus.success,
+          pets: state.pets,
+        ));
+      } else {
+        emit(state.copyWith(
+          petListStatus: ApiStatus.success,
+          pets: [...state.pets, ...success.pets],
+        ));
+      }
 
       _catchPetList = state.pets;
     }
@@ -99,5 +106,12 @@ class _PetListCubit extends Cubit<_PetListState> {
     emit(state.copyWith(
       pets: pets,
     ));
+  }
+
+  @override
+  void onEvent(KEvent event) {
+    if (event is NewPetAdopted) {
+      fetchPetList(isForceFetch: true);
+    }
   }
 }

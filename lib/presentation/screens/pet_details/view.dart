@@ -20,6 +20,8 @@ import 'package:peto/utils/app_extensions.dart';
 import 'package:peto/utils/assets/icons.dart';
 import 'package:peto/utils/assets/lottie.dart';
 import 'package:peto/utils/custom_extensions/custom_extensions.dart';
+import 'package:peto/utils/event_broker/event_broker.dart';
+import 'package:peto/utils/event_broker/events.dart';
 import 'package:peto/utils/profile/profile_cubit.dart';
 
 part 'widgets/image_preview/controller/pet_image_preview_cubit.dart';

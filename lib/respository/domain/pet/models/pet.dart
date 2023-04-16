@@ -41,6 +41,21 @@ class PetDetails {
           imageUrl: json['image_url'].cast<String>(),
           adoptionDetails: adoptionDetails,
         );
+
+  PetDetails copyWith({PetAdoptionDetails? adoptionDetails}) {
+    return PetDetails(
+      pid: pid,
+      name: name,
+      type: type,
+      breed: breed,
+      age: age,
+      gender: gender,
+      location: location,
+      description: description,
+      imageUrl: imageUrl,
+      adoptionDetails: adoptionDetails ?? this.adoptionDetails,
+    );
+  }
 }
 
 enum PetType { dog, cat }

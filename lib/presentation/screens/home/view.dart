@@ -17,6 +17,8 @@ import 'package:peto/respository/domain/user/user_repository.dart';
 import 'package:peto/respository/repository_helper_abstract.dart';
 import 'package:peto/utils/app_extensions.dart';
 import 'package:peto/utils/custom_extensions/custom_extensions.dart';
+import 'package:peto/utils/event_broker/event_broker.dart';
+import 'package:peto/utils/event_broker/events.dart';
 import 'package:peto/utils/helper/helper.dart';
 import 'package:peto/utils/theme/theme_cubit.dart';
 

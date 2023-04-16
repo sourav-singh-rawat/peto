@@ -1,6 +1,6 @@
 part of '../view.dart';
 
-class _PetDetailsCubit extends Cubit<_PetDetailsState> {
+class _PetDetailsCubit extends Cubit<_PetDetailsState> with KEventListener {
   _PetDetailsCubit() : super(_PetDetailsState.init());
 
   final scrollController = ScrollController();
@@ -21,6 +21,8 @@ class _PetDetailsCubit extends Cubit<_PetDetailsState> {
         ));
       }
     });
+
+    KAppX.eventBroker.addListener(this);
   }
 
   void fetchPetDetails(String pid) async {
@@ -67,7 +69,7 @@ class _PetDetailsCubit extends Cubit<_PetDetailsState> {
           isAdopting: false,
         ));
 
-        fetchPetDetails(state.petDetails!.pid);
+        KAppX.eventBroker.emitEvent(NewPetAdopted());
 
         completer.complete();
       }
@@ -83,6 +85,13 @@ class _PetDetailsCubit extends Cubit<_PetDetailsState> {
       response.resolve(onSuccess, onFailure);
 
       return await completer.future;
+    }
+  }
+
+  @override
+  void onEvent(KEvent event) {
+    if (event is NewPetAdopted) {
+      fetchPetDetails(state.petDetails!.pid);
     }
   }
 }

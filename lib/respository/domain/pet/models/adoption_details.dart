@@ -25,4 +25,12 @@ class PetAdoptionDetails {
     map['timestamp'] = DateTime.now().toIso8601String();
     return map;
   }
+
+  PetAdoptionDetails copyWith({bool? isAdopted}) {
+    return PetAdoptionDetails(
+      isAdopted: isAdopted ?? this.isAdopted,
+      timestamp: timestamp,
+      uid: uid,
+    );
+  }
 }
