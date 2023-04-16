@@ -92,4 +92,28 @@ class _HomeCubit extends Cubit<_HomeState> {
       isSearching: true,
     );
   }
+
+  void logout() async {
+    emit(state.copyWith(
+      isLoggingOut: true,
+    ));
+
+    final userRepository = UserRepository();
+
+    final response = await userRepository.googleLogout();
+
+    void onSuccess(GoogleLogoutSuccess s) {
+      emit(state.copyWith(
+        isLoggingOut: false,
+      ));
+    }
+
+    void onFailure(GoogleLogoutFailure f) {
+      emit(state.copyWith(
+        isLoggingOut: false,
+      ));
+    }
+
+    response.resolve(onSuccess, onFailure);
+  }
 }

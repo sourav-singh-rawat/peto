@@ -12,6 +12,7 @@ import 'package:peto/presentation/core_widgets/pill.dart';
 import 'package:peto/presentation/core_widgets/scaffold.dart';
 import 'package:peto/presentation/screens/pet_details/view.dart';
 import 'package:peto/respository/domain/pet/pet_repository.dart';
+import 'package:peto/respository/domain/user/user_repository.dart';
 import 'package:peto/respository/repository_helper_abstract.dart';
 import 'package:peto/utils/app_extensions.dart';
 import 'package:peto/utils/custom_extensions/custom_extensions.dart';
@@ -26,6 +27,7 @@ part 'widgets/search_field.dart';
 part 'controller/home_cubit.dart';
 part 'controller/home_state.dart';
 part 'widgets/filter_options.dart';
+part 'widgets/drawer.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -42,6 +44,7 @@ class HomeView extends StatelessWidget {
           return BlocBuilder<KThemeCubit, KThemeState>(
             builder: (context, state) {
               return KScaffold(
+                drawer: const _Drawer(),
                 backgroundColor: KAppX.theme.current.colors.background,
                 appBar: KAppBar(
                   centerTitle: true,
@@ -53,16 +56,9 @@ class HomeView extends StatelessWidget {
                       color: KAppX.theme.current.colors.onBackground,
                     ),
                   ),
-                  actions: [
-                    const _SearchField(),
-                    IconButton(
-                      key: ValueKey(state.type),
-                      onPressed: KAppX.theme.toggleTheme,
-                      icon: Icon(
-                        state.type == KThemeType.dark ? Icons.brightness_high_sharp : Icons.brightness_low,
-                        size: 24,
-                      ),
-                    ),
+                  actions: const [
+                    _SearchField(),
+                    SizedBox(width: 12),
                   ],
                 ),
                 body: _PetList(

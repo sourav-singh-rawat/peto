@@ -12,8 +12,10 @@ class KScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final Widget? drawer;
   const KScaffold({
     super.key,
+    this.drawer,
     this.backgroundColor,
     this.appBar,
     this.body,
@@ -27,6 +29,7 @@ class KScaffold extends StatelessWidget {
     return BlocBuilder<KThemeCubit, KThemeState>(
       builder: (context, state) {
         return Scaffold(
+          drawer: drawer,
           backgroundColor: backgroundColor ?? KAppX.theme.current.colors.backgroundVariant,
           appBar: appBar,
           body: body,
