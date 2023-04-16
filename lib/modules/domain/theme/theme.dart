@@ -10,6 +10,8 @@ enum KThemeType { dark, light }
 abstract class KThemeBox implements KModules<void> {
   static final KThemeBox instance = KThemeBoxImpl();
 
+  static const storage_key = 'current_theme';
+
   KThemeType get type;
 
   KThemeColors get colors;
