@@ -7,7 +7,7 @@ class _PetListCubit extends Cubit<_PetListState> {
 
   final scrollController = ScrollController();
 
-  final throttle = KThrottle(duration: const Duration(milliseconds: 5000));
+  final throttle = KThrottle(duration: const Duration(milliseconds: 100));
 
   void initState() {
     fetchPetList();
@@ -21,46 +21,25 @@ class _PetListCubit extends Cubit<_PetListState> {
           petListStatus: ApiStatus.loading,
         ));
 
-        throttle(() {
-          Future.delayed(const Duration(milliseconds: 2000), fetchPetList);
-        });
+        throttle(fetchPetList);
       }
     });
   }
 
+  List<PetDetails> _catchPetList = [];
+
   void fetchPetList({
     PetListRequest? request,
-    bool isSearching = false,
   }) async {
-    if (isSearching) {
-      emit(state.copyWith(
-        pets: [],
-        petListStatus: ApiStatus.loading,
-      ));
-      return;
-    }
-
-    final response = await petRepository.petsList(
-      request: PetListRequest().copyWith(
-        queryValue: request?.queryValue,
-        queryOptionsSelected: request?.queryOptionsSelected,
-      ),
-    );
+    final response = await petRepository.petsList(request: PetListRequest());
 
     void onSuccess(PetListSuccess success) {
-      if (isSearching) {
-        emit(
-          state.copyWith(
-            petListStatus: ApiStatus.success,
-            pets: success.pets,
-          ),
-        );
-      } else {
-        emit(state.copyWith(
-          petListStatus: ApiStatus.success,
-          pets: [...state.pets, ...success.pets],
-        ));
-      }
+      emit(state.copyWith(
+        petListStatus: ApiStatus.success,
+        pets: [...state.pets, ...success.pets],
+      ));
+
+      _catchPetList = state.pets;
     }
 
     void onFailure(PetListFailure failure) {
@@ -68,6 +47,8 @@ class _PetListCubit extends Cubit<_PetListState> {
         petListStatus: ApiStatus.failed,
         pets: state.pets,
       ));
+
+      _catchPetList = state.pets;
     }
 
     response.resolve(onSuccess, onFailure);
@@ -81,5 +62,29 @@ class _PetListCubit extends Cubit<_PetListState> {
       ),
       fullScreenDialog: true,
     );
+  }
+
+  void searchInPetList(String searchString) {
+    final _searchString = searchString.toLowerCase();
+    final sortedList = state.pets
+        .where(
+          (pet) =>
+              (pet.name?.toLowerCase().startsWith(_searchString) ?? false) ||
+              (pet.type?.name.toLowerCase().startsWith(_searchString) ?? false) ||
+              (pet.breed?.toLowerCase().startsWith(_searchString) ?? false) ||
+              (pet.location?.toLowerCase().startsWith(_searchString) ?? false) ||
+              (pet.gender?.name.toLowerCase().startsWith(_searchString) ?? false),
+        )
+        .toList();
+
+    emit(state.copyWith(
+      pets: sortedList,
+    ));
+  }
+
+  void resetSearch() {
+    emit(state.copyWith(
+      pets: _catchPetList,
+    ));
   }
 }

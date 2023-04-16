@@ -7,7 +7,7 @@ class _HomeCubit extends Cubit<_HomeState> {
 
   final searchTextFieldController = TextEditingController();
 
-  final throttle = KThrottle(duration: const Duration(milliseconds: 3000));
+  final throttle = KThrottle(duration: const Duration(milliseconds: 2000));
 
   void onSearchIconPressed(BuildContext context) {
     final petListStateController = BlocProvider.of<_PetListCubit>(context);
@@ -29,19 +29,11 @@ class _HomeCubit extends Cubit<_HomeState> {
         final hasNoText = searchTextFieldController.text.isEmpty;
 
         if (hasNoText) {
-          petListStateController.fetchPetList();
+          petListStateController.resetSearch();
           return;
         }
 
-        _petListRequest = _petListRequest.copyWith(
-          queryValue: searchTextFieldController.text,
-        );
-        throttle.call(() {
-          petListStateController.fetchPetList(
-            request: _petListRequest,
-            isSearching: true,
-          );
-        });
+        throttle.call(() => petListStateController.searchInPetList(searchTextFieldController.text));
       });
     }
   }
@@ -55,42 +47,43 @@ class _HomeCubit extends Cubit<_HomeState> {
       newList = [...newList, value];
     }
 
-    emit(state.copyWith(
-      filters: newList,
-    ));
+    // final petListStateController = BlocProvider.of<_PetListCubit>(context);
 
-    final petListStateController = BlocProvider.of<_PetListCubit>(context);
+// petListStateController.searchInPetList(searchTextFieldController.text)
 
-    Map<String, List<String>> queryOptionsSelected = {
-      'type': [],
-      'gender': [],
-    };
+    // final _petList = [...]
 
-    for (var item in newList) {
-      final type = item.runtimeType;
-      late String key;
-      switch (type) {
-        case PetType:
-          key = 'type';
-          item = item as PetType;
-          break;
-        case PetGender:
-          key = 'gender';
-          item = item as PetGender;
-          break;
-      }
+    // emit(state.copyWith(
+    //   filters: newList,
+    // ));
 
-      queryOptionsSelected[key] = [...queryOptionsSelected[key]!, item.name.capitalize()];
-    }
+    // emit(state.copyWith(
 
-    _petListRequest = _petListRequest.copyWith(
-      queryOptionsSelected: queryOptionsSelected,
-    );
+    // ));
 
-    petListStateController.fetchPetList(
-      request: _petListRequest,
-      isSearching: true,
-    );
+    // final petListStateController = BlocProvider.of<_PetListCubit>(context);
+
+    // Map<Enum, List<String>> queryOptionsSelected = {
+    //   PetType: [],
+    //   'gender': [],
+    // };
+
+    // for (var item in newList) {
+    //   final type = item.runtimeType;
+    //   late String key;
+    //   switch (type) {
+    //     case PetType:
+    //       key = 'type';
+    //       item = item as PetType;
+    //       break;
+    //     case PetGender:
+    //       key = 'gender';
+    //       item = item as PetGender;
+    //       break;
+    //   }
+
+    //   queryOptionsSelected[key] = [...queryOptionsSelected[key]!, item.name.capitalize()];
+    // }
   }
 
   void logout() async {

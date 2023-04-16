@@ -16,28 +16,12 @@ class PetRepositoryImpl implements PetRepository {
   @override
   Future<Result<PetListSuccess, PetListFailure>> petsList({required PetListRequest request}) async {
     try {
-      var query = _firestore.collection('pets').limit(10);
-
-      if (request.queryValue != null && request.queryValue!.isNotEmpty) {
-        query = query.where('name', isGreaterThan: request.queryValue!).where('name', isLessThan: request.queryValue!).orderBy('name');
-        // .where('type', isGreaterThanOrEqualTo: request.queryValue!)
-        // .where('type', isLessThan: '${request.queryValue!}\uf7ff')
-        // .where('breed', isGreaterThanOrEqualTo: request.queryValue!)
-        // .where('breed', isLessThan: '${request.queryValue!}\uf7ff')
-        // .where('location', isGreaterThanOrEqualTo: request.queryValue!)
-        // .where('location', isLessThan: '${request.queryValue!}\uf7ff');
-      }
-
-      if (request.queryOptionsSelected != null) {
-        for (final entry in request.queryOptionsSelected!.entries) {
-          for (final value in entry.value) {
-            query = query.where(entry.key, isEqualTo: value);
-          }
-        }
-      }
+      late Query<Map<String, dynamic>> query;
 
       if (_lastPetDocumentSnapped != null) {
-        query = query.startAfterDocument(_lastPetDocumentSnapped!);
+        query = _firestore.collection('pets').startAfterDocument(_lastPetDocumentSnapped!).limit(10);
+      } else {
+        query = _firestore.collection('pets').limit(10);
       }
 
       final collection = await query.get();
