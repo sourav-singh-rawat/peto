@@ -34,6 +34,7 @@ class _PetTile extends StatelessWidget {
             Opacity(
               opacity: isAdopted ? 0.55 : 1,
               child: Card(
+                color: KAppX.theme.current.colors.backgroundVariant,
                 shape: RoundedRectangleBorder(
                   side: BorderSide(
                     width: 1,

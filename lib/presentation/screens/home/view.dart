@@ -39,30 +39,37 @@ class HomeView extends StatelessWidget {
       ],
       child: BlocBuilder<_HomeCubit, _HomeState>(
         builder: (context, state) {
-          return KScaffold(
-            backgroundColor: KAppX.theme.current.colors.background,
-            appBar: KAppBar(
-              centerTitle: true,
-              title: Text(
-                "Adopt",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: KAppX.theme.current.fontWeight.wBold,
-                  color: KAppX.theme.current.colors.onBackground,
-                ),
-              ),
-              actions: [
-                const _SearchField(),
-                IconButton(
-                  onPressed: KAppX.theme.toggleTheme,
-                  icon: Icon(
-                    KAppX.theme.current.type == KThemeType.dark ? Icons.brightness_high_sharp : Icons.brightness_low,
-                    size: 24,
+          return BlocBuilder<KThemeCubit, KThemeState>(
+            builder: (context, state) {
+              return KScaffold(
+                backgroundColor: KAppX.theme.current.colors.background,
+                appBar: KAppBar(
+                  centerTitle: true,
+                  title: Text(
+                    "Adopt",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: KAppX.theme.current.fontWeight.wBold,
+                      color: KAppX.theme.current.colors.onBackground,
+                    ),
                   ),
+                  actions: [
+                    const _SearchField(),
+                    IconButton(
+                      key: ValueKey(state.type),
+                      onPressed: KAppX.theme.toggleTheme,
+                      icon: Icon(
+                        state.type == KThemeType.dark ? Icons.brightness_high_sharp : Icons.brightness_low,
+                        size: 24,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            body: const _PetList(),
+                body: _PetList(
+                  key: ValueKey(state.type),
+                ),
+              );
+            },
           );
         },
       ),

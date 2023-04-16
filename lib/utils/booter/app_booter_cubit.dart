@@ -14,7 +14,7 @@ part 'booter_abstract.dart';
 class KAppBooterCubit extends Cubit<KAppBooterState> {
   KAppBooterCubit() : super(KAppBooterState.init());
 
-  void bootUp() async {
+  Future<void> bootUp() async {
     final bootUpProcesses = UnmodifiableListView<Future<dynamic>>([
       KModules.instance.bootUp(),
     ]);

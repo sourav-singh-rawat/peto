@@ -4,6 +4,7 @@ import 'package:peto/modules/domain/router/router.dart';
 import 'package:peto/modules/domain/theme/theme.dart';
 import 'package:peto/presentation/screens/home/view.dart';
 import 'package:peto/presentation/screens/splash_screen/view.dart';
+import 'package:peto/utils/app_extensions.dart';
 import 'package:peto/utils/booter/app_booter_cubit.dart';
 import 'package:peto/utils/profile/profile_cubit.dart';
 import 'package:peto/utils/theme/theme_cubit.dart';
@@ -45,7 +46,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    BlocProvider.of<KAppBooterCubit>(context).bootUp();
+    () async {
+      await BlocProvider.of<KAppBooterCubit>(context).bootUp();
+      BlocProvider.of<KThemeCubit>(context).switchTo(KThemeBox.instance.type);
+    }();
 
     super.initState();
   }
