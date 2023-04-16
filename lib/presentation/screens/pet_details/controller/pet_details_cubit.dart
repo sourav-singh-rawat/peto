@@ -5,9 +5,9 @@ class _PetDetailsCubit extends Cubit<_PetDetailsState> {
 
   final scrollController = ScrollController();
 
-  void initState() {
+  void initState(BuildContext context) {
     scrollController.addListener(() {
-      if (scrollController.position.pixels >= 325) {
+      if (scrollController.position.pixels >= MediaQuery.of(context).padding.top) {
         emit(state.copyWith(
           isScrolledToTop: true,
         ));

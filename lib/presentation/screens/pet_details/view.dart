@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peto/modules/domain/theme/theme.dart';
+import 'package:peto/presentation/core_widgets/app_bar.dart';
 import 'package:peto/presentation/core_widgets/image_provider.dart';
 import 'package:peto/presentation/core_widgets/indicator_dot.dart';
 import 'package:peto/presentation/core_widgets/loader/circular_loader.dart';
@@ -64,7 +66,7 @@ class _PetDetailsViewBody extends StatefulWidget {
 class __PetDetailsViewBodyState extends State<_PetDetailsViewBody> {
   @override
   void initState() {
-    BlocProvider.of<_PetDetailsCubit>(context).initState();
+    BlocProvider.of<_PetDetailsCubit>(context).initState(context);
     super.initState();
   }
 
@@ -82,71 +84,62 @@ class __PetDetailsViewBodyState extends State<_PetDetailsViewBody> {
       builder: (context, state) {
         return KScaffold(
           appBar: state.isScrolledToTop
-              ? AppBar(
+              ? KAppBar(
                   leading: IconButton(
                     onPressed: () {
                       KAppX.router.pop();
                     },
                     icon: const Icon(Icons.close),
                   ),
-                  centerTitle: true,
-                  title: Text(widget.petDetails.name ?? ''),
                 )
               : null,
-          body: Stack(
-            children: [
-              Hero(
-                tag: '${widget.petDetails.pid}-home',
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height + safePadding,
-                  child: _PetImagePreview(
-                    pid: widget.petDetails.pid,
-                    images: widget.petDetails.imageUrl,
-                  ),
-                ),
-              ),
-              const Positioned(
-                top: 0,
-                left: 16,
-                child: SafeArea(
-                  child: _Header(),
-                ),
-              ),
-              if (isAdopted)
-                Positioned(
-                  top: 0,
-                  right: 16,
-                  child: SafeArea(
-                    child: Image.asset(
-                      KIcons.adopted_stamp,
-                      width: 150,
-                      height: 150,
-                      color: theme.colors.secondary,
+          body: SingleChildScrollView(
+            controller: stateController.scrollController,
+            child: Stack(
+              children: [
+                Hero(
+                  tag: '${widget.petDetails.pid}-home',
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height + safePadding,
+                    child: _PetImagePreview(
+                      pid: widget.petDetails.pid,
+                      images: widget.petDetails.imageUrl,
                     ),
                   ),
                 ),
-              Positioned(
-                top: 325,
-                child: SingleChildScrollView(
+                const Positioned(
+                  top: 0,
+                  left: 16,
+                  child: SafeArea(
+                    child: _Header(),
+                  ),
+                ),
+                if (isAdopted)
+                  Positioned(
+                    top: 0,
+                    right: 16,
+                    child: SafeArea(
+                      child: Image.asset(
+                        KIcons.adopted_stamp,
+                        width: 150,
+                        height: 150,
+                        color: theme.colors.secondary,
+                      ),
+                    ),
+                  ),
+                Positioned(
+                  top: 325,
                   child: _PetDetailedInfo(
                     petDetails: widget.petDetails,
                   ),
                 ),
-              ),
-            ],
-          ),
-          bottomSheet: Container(
-            height: 72,
-            color: Colors.transparent,
-            width: double.infinity,
-            padding: const EdgeInsets.only(
-              bottom: 24,
-            ),
-            alignment: Alignment.center,
-            child: _AdoptMeButton(
-              petDetails: widget.petDetails,
+              ],
             ),
           ),
+          floatingActionButton: _AdoptMeButton(
+            petDetails: widget.petDetails,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         );
       },
     );
