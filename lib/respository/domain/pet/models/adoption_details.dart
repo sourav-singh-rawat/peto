@@ -20,9 +20,9 @@ class PetAdoptionDetails {
 
   Map<String, dynamic> toRequestJson() {
     var map = <String, dynamic>{};
-    map['uid'] = uid;
+    map['uid'] = KAppX.profile.state.userDetails!.uid;
     map['is_adopted'] = true;
-    map['timestamp'] = timestamp?.toIso8601String();
+    map['timestamp'] = DateTime.now().toIso8601String();
     return map;
   }
 }

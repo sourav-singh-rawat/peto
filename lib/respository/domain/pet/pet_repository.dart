@@ -1,6 +1,7 @@
 import 'package:peto/respository/data/pet/pet_repository.dart';
 import 'package:peto/respository/domain/user/user_repository.dart';
 import 'package:peto/respository/repository_helper_abstract.dart';
+import 'package:peto/utils/app_extensions.dart';
 
 part 'models/pet.dart';
 part 'request.dart';

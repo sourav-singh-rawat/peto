@@ -10,6 +10,7 @@ import 'package:peto/presentation/core_widgets/indicator_dot.dart';
 import 'package:peto/presentation/core_widgets/loader/circular_loader.dart';
 import 'package:peto/presentation/core_widgets/pill.dart';
 import 'package:peto/presentation/core_widgets/scaffold.dart';
+import 'package:peto/presentation/screens/adoption_history/view.dart';
 import 'package:peto/presentation/screens/pet_details/view.dart';
 import 'package:peto/respository/domain/pet/pet_repository.dart';
 import 'package:peto/respository/domain/user/user_repository.dart';

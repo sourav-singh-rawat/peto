@@ -116,4 +116,11 @@ class _HomeCubit extends Cubit<_HomeState> {
 
     response.resolve(onSuccess, onFailure);
   }
+
+  void onAdoptionHistoryPressed() {
+    KAppX.router.push(
+      path: '/adoption_history',
+      page: const AdoptionHistoryScreen(),
+    );
+  }
 }

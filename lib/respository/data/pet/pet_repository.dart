@@ -93,7 +93,7 @@ class PetRepositoryImpl implements PetRepository {
     required PetDetailsRequest request,
   }) async {
     try {
-      final query = _firestore.collection('adoption_status').doc(request.pid);
+      final query = _firestore.collection('pets').doc(request.pid);
 
       final document = await query.get();
 
@@ -188,7 +188,7 @@ class PetRepositoryImpl implements PetRepository {
     required AdoptionHistoryRequest request,
   }) async {
     try {
-      var query = _firestore.collection('adoption_status');
+      var query = _firestore.collection('adoption_status').where('is_adopted', isEqualTo: true);
 
       final collection = await query.get();
 
@@ -257,6 +257,8 @@ class PetRepositoryImpl implements PetRepository {
           ),
         );
       });
+
+      adoptionHistoryDetails.sort((a, b) => b.details.timestamp!.compareTo(a.details.timestamp!));
 
       return Success(
         AdoptionHistorySuccess(

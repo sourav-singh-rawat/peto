@@ -83,10 +83,7 @@ class _Drawer extends StatelessWidget {
                         height: 24,
                       )
                     : null,
-                onTap: () {
-                  // Update the state of the app.
-                  // ...
-                },
+                onTap: stateController.onAdoptionHistoryPressed,
               ),
               _buildDivider(),
               ListTile(
