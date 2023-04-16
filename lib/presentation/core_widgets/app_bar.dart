@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peto/utils/app_extensions.dart';
+import 'package:peto/utils/theme/theme_cubit.dart';
 
 class KAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget? bottom;
@@ -30,44 +32,49 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
     final useCloseButton = parentRoute is PageRoute<dynamic> && parentRoute.fullscreenDialog;
 
     return SafeArea(
-      child: AppBar(
-        leading: leading ??
-            () {
-              if (!canPop) {
-                return null;
-              }
+      child: BlocBuilder<KThemeCubit, KThemeState>(
+        builder: (context, state) {
+          return AppBar(
+            key: ObjectKey(state),
+            leading: leading ??
+                () {
+                  if (!canPop) {
+                    return null;
+                  }
 
-              return IconButton(
-                padding: EdgeInsets.zero,
-                icon: Icon(
-                  useCloseButton ? Icons.close : Icons.arrow_back,
-                  color: KAppX.theme.current.colors.onBackground,
-                  size: 28,
-                ),
-                onPressed: () {
-                  onPopCallback?.call();
+                  return IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      useCloseButton ? Icons.close : Icons.arrow_back,
+                      color: KAppX.theme.current.colors.onBackground,
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      onPopCallback?.call();
 
-                  KAppX.router.pop();
-                },
-              );
-            }(),
-        backgroundColor: backgroundColor ?? KAppX.theme.current.colors.backgroundVariant,
-        elevation: elevation ?? 0,
-        title: title,
-        centerTitle: centerTitle,
-        actions: actions,
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          systemNavigationBarColor: Colors.transparent,
-        ),
-        bottom: bottom ??
-            PreferredSize(
-              child: Container(
-                width: double.infinity,
-                color: const Color(0xffDFDFDF),
-              ),
-              preferredSize: const Size.fromHeight(1),
+                      KAppX.router.pop();
+                    },
+                  );
+                }(),
+            backgroundColor: backgroundColor ?? KAppX.theme.current.colors.backgroundVariant,
+            elevation: elevation ?? 0,
+            title: title,
+            centerTitle: centerTitle,
+            actions: actions,
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              systemNavigationBarColor: Colors.transparent,
             ),
+            bottom: bottom ??
+                PreferredSize(
+                  child: Container(
+                    width: double.infinity,
+                    color: const Color(0xffDFDFDF),
+                  ),
+                  preferredSize: const Size.fromHeight(1),
+                ),
+          );
+        },
       ),
     );
   }
