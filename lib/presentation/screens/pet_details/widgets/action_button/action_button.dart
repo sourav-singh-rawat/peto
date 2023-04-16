@@ -1,7 +1,7 @@
 part of '../../view.dart';
 
 class _AdoptMeButton extends StatelessWidget {
-  final PetDetails petDetails;
+  final PetDetails? petDetails;
   const _AdoptMeButton({
     super.key,
     required this.petDetails,
@@ -17,18 +17,22 @@ class _AdoptMeButton extends StatelessWidget {
 
         final stateController = context.read<_PetDetailsCubit>();
 
-        final isAdopted = petDetails.adoptionDetails?.isAdopted ?? false;
+        final isAdopted = petDetails?.adoptionDetails?.isAdopted ?? false;
 
-        final petImageUrl = petDetails.imageUrl?[0];
+        final petImageUrl = petDetails?.imageUrl?[0];
 
         final userImageUrl = profileStateController.state.userDetails?.photoUrl;
 
         return GestureDetector(
           onTap: () async {
+            if (petDetails == null) {
+              return;
+            }
+
             if (!state.isAdopting && !isAdopted) {
               HapticFeedback.mediumImpact();
 
-              await stateController.onAdoptMePressed(petDetails);
+              await stateController.onAdoptMePressed(petDetails!);
 
               showCupertinoDialog(
                 context: context,

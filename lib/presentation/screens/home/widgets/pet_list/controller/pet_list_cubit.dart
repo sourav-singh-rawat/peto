@@ -7,7 +7,7 @@ class _PetListCubit extends Cubit<_PetListState> {
 
   final scrollController = ScrollController();
 
-  final throttle = KThrottle(duration: const Duration(milliseconds: 100));
+  final throttle = KThrottle(duration: const Duration(milliseconds: 5000));
 
   void initState() {
     fetchPetList();
@@ -58,7 +58,9 @@ class _PetListCubit extends Cubit<_PetListState> {
     KAppX.router.push(
       path: '/pet_details',
       page: PetDetailsView(
-        petDetails: petDetails,
+        pid: petDetails.pid,
+        name: petDetails.name,
+        imageUrl: petDetails.imageUrl?[0],
       ),
       fullScreenDialog: true,
     );

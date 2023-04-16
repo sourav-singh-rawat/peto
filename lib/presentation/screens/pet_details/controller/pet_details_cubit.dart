@@ -5,7 +5,11 @@ class _PetDetailsCubit extends Cubit<_PetDetailsState> {
 
   final scrollController = ScrollController();
 
-  void initState(BuildContext context) {
+  final petRepository = PetRepository();
+
+  void initState({required String pid, required BuildContext context}) async {
+    fetchPetDetails(pid);
+
     scrollController.addListener(() {
       if (scrollController.position.pixels >= MediaQuery.of(context).padding.top) {
         emit(state.copyWith(
@@ -19,6 +23,29 @@ class _PetDetailsCubit extends Cubit<_PetDetailsState> {
     });
   }
 
+  void fetchPetDetails(String pid) async {
+    final petDetailsResponse = await petRepository.petDetails(
+      request: PetDetailsRequest(
+        pid: pid,
+      ),
+    );
+
+    void onSuccess(PetDetailsSuccess success) {
+      emit(state.copyWith(
+        petDetails: success.details,
+        petDetailsStatus: ApiStatus.success,
+      ));
+    }
+
+    void onFailure(PetDetailsFailure failure) {
+      emit(state.copyWith(
+        petDetailsStatus: ApiStatus.failed,
+      ));
+    }
+
+    petDetailsResponse.resolve(onSuccess, onFailure);
+  }
+
   Future<void> onAdoptMePressed(PetDetails petDetails) async {
     final adoptionDetails = petDetails.adoptionDetails;
     if (adoptionDetails != null) {
@@ -27,8 +54,6 @@ class _PetDetailsCubit extends Cubit<_PetDetailsState> {
       ));
 
       final completer = Completer();
-
-      final petRepository = PetRepository();
 
       final response = await petRepository.adoptPet(
         request: AdoptionRequest(
@@ -41,6 +66,8 @@ class _PetDetailsCubit extends Cubit<_PetDetailsState> {
         emit(state.copyWith(
           isAdopting: false,
         ));
+
+        fetchPetDetails(state.petDetails!.pid);
 
         completer.complete();
       }

@@ -15,6 +15,7 @@ import 'package:peto/presentation/core_widgets/lottie.dart';
 import 'package:peto/presentation/core_widgets/scaffold.dart';
 import 'package:peto/presentation/screens/image_viewer/view.dart';
 import 'package:peto/respository/domain/pet/pet_repository.dart';
+import 'package:peto/respository/repository_helper_abstract.dart';
 import 'package:peto/utils/app_extensions.dart';
 import 'package:peto/utils/assets/icons.dart';
 import 'package:peto/utils/assets/lottie.dart';
@@ -32,10 +33,14 @@ part 'controller/pet_details_state.dart';
 part 'widgets/adopted_dialog.dart';
 
 class PetDetailsView extends StatelessWidget {
-  final PetDetails petDetails;
+  final String pid;
+  final String? name;
+  final String? imageUrl;
   const PetDetailsView({
     Key? key,
-    required this.petDetails,
+    required this.pid,
+    this.name,
+    this.imageUrl,
   }) : super(key: key);
 
   @override
@@ -46,17 +51,23 @@ class PetDetailsView extends StatelessWidget {
         BlocProvider(create: (_) => _PetImagePreviewCubit()),
       ],
       child: _PetDetailsViewBody(
-        petDetails: petDetails,
+        pid: pid,
+        name: name,
+        imageUrl: imageUrl,
       ),
     );
   }
 }
 
 class _PetDetailsViewBody extends StatefulWidget {
-  final PetDetails petDetails;
+  final String pid;
+  final String? name;
+  final String? imageUrl;
   const _PetDetailsViewBody({
     super.key,
-    required this.petDetails,
+    required this.pid,
+    this.name,
+    this.imageUrl,
   });
 
   @override
@@ -66,7 +77,10 @@ class _PetDetailsViewBody extends StatefulWidget {
 class __PetDetailsViewBodyState extends State<_PetDetailsViewBody> {
   @override
   void initState() {
-    BlocProvider.of<_PetDetailsCubit>(context).initState(context);
+    BlocProvider.of<_PetDetailsCubit>(context).initState(
+      pid: widget.pid,
+      context: context,
+    );
     super.initState();
   }
 
@@ -78,10 +92,10 @@ class __PetDetailsViewBodyState extends State<_PetDetailsViewBody> {
 
     final stateController = context.read<_PetDetailsCubit>();
 
-    final isAdopted = widget.petDetails.adoptionDetails?.isAdopted ?? false;
-
     return BlocBuilder<_PetDetailsCubit, _PetDetailsState>(
       builder: (context, state) {
+        final isAdopted = state.petDetails?.adoptionDetails?.isAdopted ?? false;
+
         return KScaffold(
           appBar: state.isScrolledToTop
               ? KAppBar(
@@ -98,12 +112,24 @@ class __PetDetailsViewBodyState extends State<_PetDetailsViewBody> {
             child: Stack(
               children: [
                 Hero(
-                  tag: '${widget.petDetails.pid}-home',
+                  tag: '${widget.pid}-home',
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height + safePadding,
-                    child: _PetImagePreview(
-                      pid: widget.petDetails.pid,
-                      images: widget.petDetails.imageUrl,
+                    child: Stack(
+                      children: [
+                        _PetImagePreview(
+                          pid: widget.pid,
+                          images: state.petDetails?.imageUrl ?? [widget.imageUrl ?? ''],
+                        ),
+                        if (state.petDetailsStatus == ApiStatus.loading)
+                          const Positioned.fill(
+                            child: Center(
+                              child: KLottieBuilder(
+                                KLottie.dot_loader,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ),
@@ -130,14 +156,15 @@ class __PetDetailsViewBodyState extends State<_PetDetailsViewBody> {
                 Positioned(
                   top: 325,
                   child: _PetDetailedInfo(
-                    petDetails: widget.petDetails,
+                    name: widget.name,
+                    petDetails: state.petDetails,
                   ),
                 ),
               ],
             ),
           ),
           floatingActionButton: _AdoptMeButton(
-            petDetails: widget.petDetails,
+            petDetails: state.petDetails,
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         );

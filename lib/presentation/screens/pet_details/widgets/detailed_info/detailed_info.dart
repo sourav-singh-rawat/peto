@@ -1,15 +1,19 @@
 part of '../../view.dart';
 
 class _PetDetailedInfo extends StatelessWidget {
-  final PetDetails petDetails;
+  final String? name;
+  final PetDetails? petDetails;
   const _PetDetailedInfo({
     super.key,
+    required this.name,
     required this.petDetails,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = KAppX.theme.current;
+
+    final state = BlocProvider.of<_PetDetailsCubit>(context).state;
 
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -28,24 +32,31 @@ class _PetDetailedInfo extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            petDetails.name ?? 'Pet',
+            petDetails?.name ?? name ?? '',
             style: TextStyle(
               fontSize: 32,
               fontWeight: theme.fontWeight.wBold,
               color: theme.colors.onBackgroundVariant,
             ),
           ),
-          const SizedBox(height: 16),
+          if (state.petDetailsStatus == ApiStatus.loading)
+            Container(
+              height: 359,
+              alignment: Alignment.center,
+              child: const KLottieBuilder(KLottie.dot_loader),
+            )
+          else
+            const SizedBox(height: 16),
           _BasicInfoPoints(
-            age: petDetails.age,
-            gender: petDetails.gender?.name,
-            breed: petDetails.breed,
+            age: state.petDetails?.age,
+            gender: state.petDetails?.gender?.name,
+            breed: state.petDetails?.breed,
           ),
           const SizedBox(height: 22),
           _PetStory(
-            petName: petDetails.name,
-            petStory: petDetails.description,
-            location: petDetails.location,
+            petName: petDetails?.name,
+            petStory: petDetails?.description,
+            location: petDetails?.location,
           ),
         ],
       ),
