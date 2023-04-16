@@ -47,43 +47,13 @@ class _HomeCubit extends Cubit<_HomeState> {
       newList = [...newList, value];
     }
 
-    // final petListStateController = BlocProvider.of<_PetListCubit>(context);
+    emit(state.copyWith(
+      filters: newList,
+    ));
 
-// petListStateController.searchInPetList(searchTextFieldController.text)
+    final petListStateController = BlocProvider.of<_PetListCubit>(context);
 
-    // final _petList = [...]
-
-    // emit(state.copyWith(
-    //   filters: newList,
-    // ));
-
-    // emit(state.copyWith(
-
-    // ));
-
-    // final petListStateController = BlocProvider.of<_PetListCubit>(context);
-
-    // Map<Enum, List<String>> queryOptionsSelected = {
-    //   PetType: [],
-    //   'gender': [],
-    // };
-
-    // for (var item in newList) {
-    //   final type = item.runtimeType;
-    //   late String key;
-    //   switch (type) {
-    //     case PetType:
-    //       key = 'type';
-    //       item = item as PetType;
-    //       break;
-    //     case PetGender:
-    //       key = 'gender';
-    //       item = item as PetGender;
-    //       break;
-    //   }
-
-    //   queryOptionsSelected[key] = [...queryOptionsSelected[key]!, item.name.capitalize()];
-    // }
+    petListStateController.filterPetList(newList);
   }
 
   void logout() async {

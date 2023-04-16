@@ -87,4 +87,15 @@ class _PetListCubit extends Cubit<_PetListState> {
       pets: _catchPetList,
     ));
   }
+
+  void filterPetList(List<Enum> filters) {
+    var pets = [...state.pets];
+    for (final item in filters) {
+      pets = pets.where((pet) => (pet.type?.name == item.name) || (pet.gender?.name == item.name)).toList();
+    }
+
+    emit(state.copyWith(
+      pets: pets,
+    ));
+  }
 }

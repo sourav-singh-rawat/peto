@@ -35,27 +35,27 @@ class _SearchField extends StatelessWidget {
                         fontWeight: theme.fontWeight.wRegular,
                       ),
                       decoration: InputDecoration(
-                        prefixIcon: IconButton(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              backgroundColor: Colors.transparent,
-                              context: context,
-                              builder: (context) {
-                                return MultiBlocProvider(
-                                  providers: [
-                                    BlocProvider(create: (_) => _HomeCubit()),
-                                    BlocProvider(create: (_) => _PetListCubit()),
-                                  ],
-                                  child: const _FilterOptions(),
-                                );
-                              },
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.filter_list,
-                            size: 24,
-                          ),
-                        ),
+                        // prefixIcon: IconButton(
+                        //   onPressed: () {
+                        //     showModalBottomSheet(
+                        //       backgroundColor: Colors.transparent,
+                        //       context: context,
+                        //       builder: (context) {
+                        //         return MultiBlocProvider(
+                        //           providers: [
+                        //             BlocProvider(create: (_) => _HomeCubit()),
+                        //             BlocProvider(create: (_) => _PetListCubit()),
+                        //           ],
+                        //           child: const _FilterOptions(),
+                        //         );
+                        //       },
+                        //     );
+                        //   },
+                        //   icon: const Icon(
+                        //     Icons.filter_list,
+                        //     size: 24,
+                        //   ),
+                        // ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: theme.colors.primary,
