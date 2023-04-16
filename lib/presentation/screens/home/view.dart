@@ -22,7 +22,7 @@ import 'package:peto/utils/theme/theme_cubit.dart';
 part 'widgets/pet_list/controller/pet_list_cubit.dart';
 part 'widgets/pet_list/controller/pet_list_state.dart';
 part 'widgets/pet_list/pet_list.dart';
-part 'widgets/pet_tile/pet_tile.dart';
+part 'widgets/pet_tile.dart';
 part 'widgets/search_field.dart';
 part 'controller/home_cubit.dart';
 part 'controller/home_state.dart';
